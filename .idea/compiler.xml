@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="openvidu-mvc-java" />
+        <module name="Zoom-clone" />
         <module name="Zoom-Clone-Dummy" />
         <module name="Zoom-Clone" />
       </profile>
@@ -16,6 +17,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Zoom-Clone" options="-parameters" />
       <module name="Zoom-Clone-Dummy" options="-parameters" />
+      <module name="Zoom-clone" options="-parameters" />
       <module name="openvidu-mvc-java" options="-parameters" />
     </option>
   </component>
