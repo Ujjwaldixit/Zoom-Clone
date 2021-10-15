@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "meeting")
-public class Schedule {
+public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long meetingId;

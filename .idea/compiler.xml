@@ -8,11 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="openvidu-mvc-java" />
         <module name="Zoom-Clone-Dummy" />
+        <module name="Zoom-Clone" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Zoom-Clone" options="-parameters" />
       <module name="Zoom-Clone-Dummy" options="-parameters" />
       <module name="openvidu-mvc-java" options="-parameters" />
     </option>
