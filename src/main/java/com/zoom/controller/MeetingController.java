@@ -1,4 +1,4 @@
-package io.openvidu.mvc.java;
+package com.zoom.controller;
 
 import org.springframework.stereotype.Controller;
 

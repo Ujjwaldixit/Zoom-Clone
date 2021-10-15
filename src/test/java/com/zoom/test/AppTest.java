@@ -1,4 +1,4 @@
-package io.openvidu.mvc.java.test;
+package com.zoom.test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
