@@ -29,16 +29,15 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <!-- success message -->
-            <div th:if="${param.success}">
-                <div class="alert alert-info">Welcome to Blog Application!</div>
-            </div>
+<!--            <div>-->
+<!--                <div class="alert alert-info">W!</div>-->
+<!--            </div>-->
 
             <h1>
-                Registration
+                Schedule Meeting
             </h1>
 
-            <form th:action="@{/schedule}" method="post" th:object="${meeting}">
+            <form th:action="@{/scheduleMeeting}" th:object="${meeting}" method="post">
                 <div class="form-group">
                     <label class="control-label" for="topic">
 
@@ -57,16 +56,14 @@
                     <label class="control-label" for="start-time">
                         password
                     </label>
-                    <input id="start-time" class="form-control"  th:field="${meeting.start-time}" required autofocus="autofocus" >
+                    <input id="start-time" class="form-control"  th:field="${meeting.startTime}" required autofocus="autofocus" >
                 </div>
 
-                <p th:>
-
-                </p>
+<!--                <p></p>-->
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Schedule</button>
-                    <span>Already registered? <a href="/" th:href="@{/login}">Login here</a></span>
+<!--                    <span>Already registered? <a href="/" th:href="@{/login}">Login here</a></span>-->
                 </div>
             </form>
         </div>
