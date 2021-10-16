@@ -19,11 +19,7 @@ public class PasswordGenerator {
     private static final int PASSWORD_LENGTH = 20;
     private static final SecureRandom random = new SecureRandom();
 
-    public static void main(String[] args) {
-        generateStrongPassword();
-    }
-
-    public static String generateStrongPassword() {
+    public  String generateStrongPassword() {
 
         StringBuilder result = new StringBuilder(PASSWORD_LENGTH);
 
@@ -57,7 +53,7 @@ public class PasswordGenerator {
         return password;
     }
 
-    private static String generateRandomString(String input, int size) {
+    private  String generateRandomString(String input, int size) {
 
         if (input == null || input.length() <= 0)
             throw new IllegalArgumentException("Invalid input.");
@@ -72,7 +68,7 @@ public class PasswordGenerator {
         return result.toString();
     }
 
-    public static String shuffleString(String input) {
+    public String shuffleString(String input) {
         List<String> result = Arrays.asList(input.split(""));
         Collections.shuffle(result);
         return result.stream().collect(Collectors.joining());
