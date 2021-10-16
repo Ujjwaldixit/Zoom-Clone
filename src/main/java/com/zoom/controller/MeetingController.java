@@ -27,7 +27,7 @@ public class MeetingController {
     public String meeting(@RequestParam("meeting") Meeting meeting,
                           Model model) {
        meeting.setPassCode(passwordGenerator.generateStrongPassword());
-        return "scheduleMeeting";
+        return "schedule";
     }
 
     @PostMapping("scheduleMeeting")
