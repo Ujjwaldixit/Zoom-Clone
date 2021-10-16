@@ -19,9 +19,9 @@ public class Meeting {
 
     private String topic;
 
-    private Date startDate;
+//    private Date startDate;
 
-    private Timestamp startTime;
+    private Timestamp startDateTime;
 
     private String passCode;
 
