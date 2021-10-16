@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Zoom</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+</head>
+<body>
+<!-- create navigation header   -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}">schedule meeting</a>
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+<!--            <div>-->
+<!--                <div class="alert alert-info">W!</div>-->
+<!--            </div>-->
+
+            <h1>
+                Schedule Meeting
+            </h1>
+
+            <form th:action="@{/scheduleMeeting}" th:object="${meeting}" method="post">
+                <div class="form-group">
+                    <label class="control-label" for="topic">
+
+                    </label>
+                    <input id="topic" class="form-control" th:field="${meeting.name}" required autofocus="autofocus" >
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="date">
+                        Email
+                    </label>
+                    <input id="date" class="form-control" th:field="${meeting.startDate}" required autofocus="autofocus" >
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="start-time">
+                        password
+                    </label>
+                    <input id="start-time" class="form-control"  th:field="${meeting.startTime}" required autofocus="autofocus" >
+                </div>
+
+<!--                <p></p>-->
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Schedule</button>
+<!--                    <span>Already registered? <a href="/" th:href="@{/login}">Login here</a></span>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
