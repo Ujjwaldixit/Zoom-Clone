@@ -1,10 +1,14 @@
 package com.zoom.controller;
 
+import java.sql.Timestamp;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import com.zoom.model.Meeting;
+import com.zoom.service.MeetingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +21,13 @@ import io.openvidu.java.client.ConnectionType;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.OpenViduRole;
 import io.openvidu.java.client.Session;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class SessionController {
+
+	@Autowired
+	private MeetingService meetingService;
 
 	// OpenVidu object as entrypoint of the SDK
 	private OpenVidu openVidu;
@@ -43,7 +51,7 @@ public class SessionController {
 
 	@RequestMapping(value = "/session", method = RequestMethod.POST)
 	public String joinSession(@RequestParam(name = "data") String clientData,
-			@RequestParam(name = "session-name") String sessionName, Model model, HttpSession httpSession) {
+							  @RequestParam(name = "session-name") String sessionName, Model model, HttpSession httpSession, RedirectAttributes redirectAttributes) {
 
 		try {
 			checkUserLogged(httpSession);
@@ -63,6 +71,16 @@ public class SessionController {
 		// Build connectionProperties object with the serverData and the role
 		ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
 				.role(role).data(serverData).build();
+		Meeting meeting = meetingService.getMeetingByMeetingId(Long.parseLong(sessionName));
+		if(meeting != null){
+			Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+			int checkMeetingDateTime = currentTime.compareTo(meeting.getStartDateTime());
+
+			if(checkMeetingDateTime < 0){
+				redirectAttributes.addFlashAttribute("error", "!!! Session has not started yet !!!");
+			}
+			return "dashboard";
+		}
 
 		if (this.mapSessions.get(sessionName) != null) {
 			// Session already exists
