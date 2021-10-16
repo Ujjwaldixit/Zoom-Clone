@@ -20,7 +20,6 @@
                     class="icon-bar"></span> <span class="icon-bar"></span> <span
                     class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#" th:href="@{/}">schedule meeting</a>
         </div>
     </div>
 </nav>
@@ -40,26 +39,31 @@
             <form th:action="@{/scheduleMeeting}" th:object="${meeting}" method="post">
                 <div class="form-group">
                     <label class="control-label" for="topic">
-
+                        Topic
                     </label>
-                    <input id="topic" class="form-control" th:field="${meeting.name}" required autofocus="autofocus" >
+                    <input id="topic" class="form-control" th:field="${meeting.topic}" required autofocus="autofocus" >
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="date">
-                        Email
+                        Start-date
                     </label>
                     <input id="date" class="form-control" th:field="${meeting.startDate}" required autofocus="autofocus" >
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="start-time">
-                        password
+                        Start-time
                     </label>
                     <input id="start-time" class="form-control"  th:field="${meeting.startTime}" required autofocus="autofocus" >
                 </div>
 
-<!--                <p></p>-->
+                <div class="form-group">
+                    <label class="control-label" for="pass-code">
+                        Pass-code
+                    </label>
+                    <input id="pass-code" class="form-control"  th:field="${meeting.passCode}" required autofocus="autofocus" >
+                </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Schedule</button>

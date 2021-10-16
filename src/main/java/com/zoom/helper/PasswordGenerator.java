@@ -1,5 +1,7 @@
 package com.zoom.helper;
 
+import org.springframework.context.annotation.Bean;
+
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
