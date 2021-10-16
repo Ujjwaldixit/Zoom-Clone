@@ -19,6 +19,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public void saveMeetingSchedule(Meeting meeting) {
+        meeting.setActive(true);
         meetingRepository.save(meeting);
     }
 }
