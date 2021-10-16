@@ -16,4 +16,9 @@ public class MeetingServiceImpl implements MeetingService {
     public Meeting getMeetingByMeetingId(Long meetingId) {
         return meetingRepository.findMeetingByMeetingId(meetingId);
     }
+
+    @Override
+    public void saveMeetingSchedule(Meeting meeting) {
+        meetingRepository.save(meeting);
+    }
 }
