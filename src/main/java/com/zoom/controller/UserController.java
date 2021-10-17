@@ -33,9 +33,9 @@ public class UserController {
 		}
 	}
 
-	@GetMapping(value = "/login")
+	@GetMapping("/login")
 	public String displayLoginForm() {
-
+		System.out.println("inside login");
 		return "login";
 	}
 
