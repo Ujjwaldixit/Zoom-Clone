@@ -1,5 +1,4 @@
-<html>
-
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
 	<title>openvidu-mvc-java</title>
 
@@ -21,6 +20,7 @@
 
 <body>
 
+<div class="alert alert-error text-center" role="alert" th:text="${error}" th:if="${error}"></div>
 	<nav class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
@@ -41,7 +41,7 @@
 					<form class="form-group" action="/session" method="post">
 						<p>
 							<label>Participant</label>
-							<input class="form-control" type="text" name="data" required="true"></input>
+							<input class="form-control" type="text" name="data" th:value="${username}" required="true"></input>
 						</p>
 						<p>
 							<label>Session</label>
@@ -72,11 +72,10 @@
 
 </body>
 
-<script>
-	window.onload = function () { // Generate participant info
-		$("input[name='session-name']").val("Session " + Math.floor(Math.random() * 10));
-		$("input[name='data']").val("Participant " + Math.floor(Math.random() * 100));
-	}
-</script>
-
+<!--<script>-->
+<!--	window.onload = function () { // Generate participant info-->
+<!--		$("input[name='session-name']").val("Session " + Math.floor(Math.random() * 10));-->
+<!--		$("input[name='data']").val("Participant " + Math.floor(Math.random() * 100));-->
+<!--	}-->
+<!--</script>-->
 </html>

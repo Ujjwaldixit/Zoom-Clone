@@ -1,11 +1,17 @@
 package com.zoom.controller;
 
+import java.sql.Timestamp;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import com.zoom.model.Meeting;
+import com.zoom.service.MeetingService;
+import com.zoom.service.impl.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,150 +23,209 @@ import io.openvidu.java.client.ConnectionType;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.OpenViduRole;
 import io.openvidu.java.client.Session;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class SessionController {
 
-	// OpenVidu object as entrypoint of the SDK
-	private OpenVidu openVidu;
+    @Autowired
+    private MeetingService meetingService;
 
-	// Collection to pair session names and OpenVidu Session objects
-	private Map<String, Session> mapSessions = new ConcurrentHashMap<>();
-	// Collection to pair session names and tokens (the inner Map pairs tokens and
-	// role associated)
-	private Map<String, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
+    // OpenVidu object as entrypoint of the SDK
+    private OpenVidu openVidu;
 
-	// URL where our OpenVidu server is listening
-	private String OPENVIDU_URL;
-	// Secret shared with our OpenVidu server
-	private String SECRET;
+    // Collection to pair session names and OpenVidu Session objects
+    private Map<String, Session> mapSessions = new ConcurrentHashMap<>();
+    // Collection to pair session names and tokens (the inner Map pairs tokens and
+    // role associated)
+    private Map<String, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
 
-	public SessionController(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
-		this.SECRET = secret;
-		this.OPENVIDU_URL = openviduUrl;
-		this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
-	}
+    // URL where our OpenVidu server is listening
+    private String OPENVIDU_URL;
+    // Secret shared with our OpenVidu server
+    private String SECRET;
 
-	@RequestMapping(value = "/session", method = RequestMethod.POST)
-	public String joinSession(@RequestParam(name = "data") String clientData,
-			@RequestParam(name = "session-name") String sessionName, Model model, HttpSession httpSession) {
+    public SessionController(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
+        this.SECRET = secret;
+        this.OPENVIDU_URL = openviduUrl;
+        this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
+    }
 
-		try {
-			checkUserLogged(httpSession);
-		} catch (Exception e) {
-			return "index";
-		}
-		System.out.println("Getting sessionId and token | {sessionName}={" + sessionName + "}");
+    @RequestMapping(value = "/session", method = RequestMethod.POST)
+    public String joinSession(@AuthenticationPrincipal UserDetailsImpl user,
+                              @RequestParam(name = "data") String clientData,
+                              @RequestParam(name = "session-name") String sessionName,
+                              Model model,
+                              HttpSession httpSession,
+                              RedirectAttributes redirectAttributes) {
 
-		// Role associated to this user
-		OpenViduRole role = LoginController.users.get(httpSession.getAttribute("loggedUser")).role;
+        if(user==null) {
+            return "index";
+        }
+        System.out.println("Getting sessionId and token | {sessionName}={" + sessionName + "}");
 
-		// Optional data to be passed to other users when this user connects to the
-		// video-call. In this case, a JSON with the value we stored in the HttpSession
-		// object on login
-		String serverData = "{\"serverData\": \"" + httpSession.getAttribute("loggedUser") + "\"}";
+        // Role associated to this user
+        System.out.println("before session");
+        System.out.println("session value "+httpSession.getAttribute("loggedUser") );
+        //OpenViduRole role = UserController.users.get(httpSession.getAttribute("loggedUser")).role;
+         OpenViduRole role=OpenViduRole.PUBLISHER;
+        // Optional data to be passed to other users when this user connects to the
+        // video-call. In this case, a JSON with the value we stored in the HttpSession
+        // object on login
 
-		// Build connectionProperties object with the serverData and the role
-		ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
-				.role(role).data(serverData).build();
+        String serverData = "{\"serverData\": \"" + httpSession.getAttribute("loggedUser") + "\"}";
 
-		if (this.mapSessions.get(sessionName) != null) {
-			// Session already exists
-			System.out.println("Existing session " + sessionName);
-			try {
+        // Build connectionProperties object with the serverData and the role
+        ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
+                .role(role).data(serverData).build();
 
-				// Generate a new token with the recently created connectionProperties
-				String token = this.mapSessions.get(sessionName).createConnection(connectionProperties).getToken();
+        try {
+            Meeting meeting = meetingService.getMeetingByMeetingId(Long.parseLong(sessionName));
+            if (meeting != null) {
+                sessionName = meeting.getMeetingId().toString();
+                System.out.println(" check time " + meeting.getStartDateTime().compareTo(new Timestamp(System.currentTimeMillis())));
 
-				// Update our collection storing the new token
-				this.mapSessionNamesTokens.get(sessionName).put(token, role);
+//                if (meeting.getStartDateTime().compareTo(new Timestamp(System.currentTimeMillis())) > 0) {
+//                    redirectAttributes.addFlashAttribute("error", "!!!Meeting Has Not Started Yet!!!");
+//                    model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+//                    return "redirect:/dashboard";
+//                }
 
-				// Add all the needed attributes to the template
-				model.addAttribute("sessionName", sessionName);
-				model.addAttribute("token", token);
-				model.addAttribute("nickName", clientData);
-				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
+                if (this.mapSessions.get(sessionName) != null) {
+                    // Session already exists
+                    System.out.println("Existing session " + sessionName);
+                    try {
 
-				// Return session.html template
-				return "session";
+                        // Generate a new token with the recently created connectionProperties
+                        String token = this.mapSessions.get(sessionName).createConnection(connectionProperties).getToken();
 
-			} catch (Exception e) {
-				// If error just return dashboard.html template
-				model.addAttribute("username", httpSession.getAttribute("loggedUser"));
-				return "dashboard";
-			}
-		} else {
-			// New session
-			System.out.println("New session " + sessionName);
-			try {
+                        // Update our collection storing the new token
+                        this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
-				// Create a new OpenVidu Session
-				Session session = this.openVidu.createSession();
-				// Generate a new token with the recently created connectionProperties
-				String token = session.createConnection(connectionProperties).getToken();
+                        // Add all the needed attributes to the template
+                        model.addAttribute("sessionName", sessionName);
+                        model.addAttribute("token", token);
+                        model.addAttribute("nickName", clientData);
+                        model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
 
-				// Store the session and the token in our collections
-				this.mapSessions.put(sessionName, session);
-				this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
-				this.mapSessionNamesTokens.get(sessionName).put(token, role);
+                        // Return session.html template
+                        return "session";
 
-				// Add all the needed attributes to the template
-				model.addAttribute("sessionName", sessionName);
-				model.addAttribute("token", token);
-				model.addAttribute("nickName", clientData);
-				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
+                    } catch (Exception e) {
+                        // If error just return dashboard.html template
+                        model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+                        return "dashboard";
+                    }
+                }
+                else {
+                    // New session
+                    System.out.println("New session " + sessionName);
+                    try {
 
-				// Return session.html template
-				return "session";
+                        // Create a new OpenVidu Session
+                        Session session = this.openVidu.createSession();
+                        // Generate a new token with the recently created connectionProperties
+                        String token = session.createConnection(connectionProperties).getToken();
 
-			} catch (Exception e) {
-				// If error just return dashboard.html template
-				model.addAttribute("username", httpSession.getAttribute("loggedUser"));
-				return "dashboard";
-			}
-		}
-	}
+                        // Store the session and the token in our collections
+                        this.mapSessions.put(sessionName, session);
+                        this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
+                        this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
-	@RequestMapping(value = "/leave-session", method = RequestMethod.POST)
-	public String removeUser(@RequestParam(name = "session-name") String sessionName,
-			@RequestParam(name = "token") String token, Model model, HttpSession httpSession) throws Exception {
+                        // Add all the needed attributes to the template
+                        model.addAttribute("sessionName", sessionName);
+                        model.addAttribute("token", token);
+                        model.addAttribute("nickName", clientData);
+                        model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
 
-		try {
-			checkUserLogged(httpSession);
-		} catch (Exception e) {
-			return "index";
-		}
-		System.out.println("Removing user | sessioName=" + sessionName + ", token=" + token);
+                        // Return session.html template
+                        return "session";
 
-		// If the session exists ("TUTORIAL" in this case)
-		if (this.mapSessions.get(sessionName) != null && this.mapSessionNamesTokens.get(sessionName) != null) {
+                    } catch (Exception e) {
+                        // If error just return dashboard.html template
+                        model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+                        return "dashboard";
+                    }
+                }
+            }
+            else {
+                // New session
+                System.out.println("New session " + sessionName);
+                try {
 
-			// If the token exists
-			if (this.mapSessionNamesTokens.get(sessionName).remove(token) != null) {
-				// User left the session
-				if (this.mapSessionNamesTokens.get(sessionName).isEmpty()) {
-					// Last user left: session must be removed
-					this.mapSessions.remove(sessionName);
-				}
-				return "redirect:/dashboard";
+                    // Create a new OpenVidu Session
+                    Session session = this.openVidu.createSession();
+                    // Generate a new token with the recently created connectionProperties
+                    String token = session.createConnection(connectionProperties).getToken();
 
-			} else {
-				// The TOKEN wasn't valid
-				System.out.println("Problems in the app server: the TOKEN wasn't valid");
-				return "redirect:/dashboard";
-			}
+                    // Store the session and the token in our collections
+                    this.mapSessions.put(sessionName, session);
+                    this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
+                    this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
-		} else {
-			// The SESSION does not exist
-			System.out.println("Problems in the app server: the SESSION does not exist");
-			return "redirect:/dashboard";
-		}
-	}
+                    // Add all the needed attributes to the template
+                    model.addAttribute("sessionName", sessionName);
+                    model.addAttribute("token", token);
+                    model.addAttribute("nickName", clientData);
+                    model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
 
-	private void checkUserLogged(HttpSession httpSession) throws Exception {
-		if (httpSession == null || httpSession.getAttribute("loggedUser") == null) {
-			throw new Exception("User not logged");
-		}
-	}
+                    // Return session.html template
+                    return "session";
+
+                } catch (Exception e) {
+                    // If error just return dashboard.html template
+                    model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+                    return "dashboard";
+                }
+            }
+        }catch (Exception e)
+        {
+            redirectAttributes.addFlashAttribute("error", "!!!Invalid Session Id!!!");
+            model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+            return "redirect:/dashboard";
+        }
+    }
+
+    @RequestMapping(value = "/leave-session", method = RequestMethod.POST)
+    public String removeUser(@RequestParam(name = "session-name") String sessionName,
+                             @RequestParam(name = "token") String token, Model model, HttpSession httpSession) throws Exception {
+
+        try {
+            checkUserLogged(httpSession);
+        } catch (Exception e) {
+            return "index";
+        }
+        System.out.println("Removing user | sessioName=" + sessionName + ", token=" + token);
+
+        // If the session exists ("TUTORIAL" in this case)
+        if (this.mapSessions.get(sessionName) != null && this.mapSessionNamesTokens.get(sessionName) != null) {
+
+            // If the token exists
+            if (this.mapSessionNamesTokens.get(sessionName).remove(token) != null) {
+                // User left the session
+                if (this.mapSessionNamesTokens.get(sessionName).isEmpty()) {
+                    // Last user left: session must be removed
+                    this.mapSessions.remove(sessionName);
+                }
+                return "redirect:/dashboard";
+
+            } else {
+                // The TOKEN wasn't valid
+                System.out.println("Problems in the app server: the TOKEN wasn't valid");
+                return "redirect:/dashboard";
+            }
+
+        } else {
+            // The SESSION does not exist
+            System.out.println("Problems in the app server: the SESSION does not exist");
+            return "redirect:/dashboard";
+        }
+    }
+
+    private void checkUserLogged(HttpSession httpSession) throws Exception {
+        if (httpSession == null || httpSession.getAttribute("loggedUser") == null) {
+            throw new Exception("User not logged");
+        }
+    }
 
 }

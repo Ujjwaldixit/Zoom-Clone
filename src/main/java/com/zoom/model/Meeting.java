@@ -1,5 +1,6 @@
 package com.zoom.model;
 
+import io.openvidu.java.client.Session;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,10 @@ public class Meeting {
 
     private String topic;
 
-    private Date startDate;
-
-    private Timestamp startTime;
+    private Timestamp startDateTime;
 
     private String passCode;
 
     private boolean isActive;
+
 }
