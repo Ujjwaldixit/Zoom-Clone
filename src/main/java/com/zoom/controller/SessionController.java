@@ -117,6 +117,36 @@ public class SessionController {
                         return "dashboard";
                     }
                 }
+                else {
+                    // New session
+                    System.out.println("New session " + sessionName);
+                    try {
+
+                        // Create a new OpenVidu Session
+                        Session session = this.openVidu.createSession();
+                        // Generate a new token with the recently created connectionProperties
+                        String token = session.createConnection(connectionProperties).getToken();
+
+                        // Store the session and the token in our collections
+                        this.mapSessions.put(sessionName, session);
+                        this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
+                        this.mapSessionNamesTokens.get(sessionName).put(token, role);
+
+                        // Add all the needed attributes to the template
+                        model.addAttribute("sessionName", sessionName);
+                        model.addAttribute("token", token);
+                        model.addAttribute("nickName", clientData);
+                        model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
+
+                        // Return session.html template
+                        return "session";
+
+                    } catch (Exception e) {
+                        // If error just return dashboard.html template
+                        model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+                        return "dashboard";
+                    }
+                }
             }
             else {
                 // New session
@@ -154,8 +184,6 @@ public class SessionController {
             model.addAttribute("username", httpSession.getAttribute("loggedUser"));
             return "redirect:/dashboard";
         }
-        model.addAttribute("username", httpSession.getAttribute("loggedUser"));
-        return "dashboard";
     }
 
     @RequestMapping(value = "/leave-session", method = RequestMethod.POST)
