@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
 	<title>openvidu-mvc-java</title>
@@ -131,7 +130,7 @@
 			// trying to publish its stream. Even if someone modified the client's code and
 			// published the stream, it wouldn't work if the token sent in Session.connect
 			// method is not recognized as 'PUBLIHSER' role by OpenVidu Server
-			if (isPublisher()) {
+			//if (isPublisher()) {
 
 				// --- 6) Get your own camera stream ---
 
@@ -165,10 +164,10 @@
 
 				session.publish(publisher);
 
-			} else {
-				console.warn('You don\'t have permissions to publish');
-				initMainVideoThumbnail(); // Show SUBSCRIBER message in main video
-			}
+			//} else {
+				//console.warn('You don\'t have permissions to publish');
+				//initMainVideoThumbnail(); // Show SUBSCRIBER message in main video
+			//}
 		})
 		.catch(error => {
 			console.warn('There was an error connecting to the session:', error.code, error.message);

@@ -54,4 +54,16 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public String getRole(){
+        return user.getRole();
+    }
+
+    public String getName(){
+        return user.getUsername();
+    }
+
+    public User getUser(){
+        return user;
+    }
 }

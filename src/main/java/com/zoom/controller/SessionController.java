@@ -8,8 +8,10 @@ import javax.servlet.http.HttpSession;
 
 import com.zoom.model.Meeting;
 import com.zoom.service.MeetingService;
+import com.zoom.service.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +30,9 @@ public class SessionController {
 
     @Autowired
     private MeetingService meetingService;
+
     // OpenVidu object as entrypoint of the SDK
     private OpenVidu openVidu;
-
 
     // Collection to pair session names and OpenVidu Session objects
     private Map<String, Session> mapSessions = new ConcurrentHashMap<>();
@@ -50,25 +52,27 @@ public class SessionController {
     }
 
     @RequestMapping(value = "/session", method = RequestMethod.POST)
-    public String joinSession(@RequestParam(name = "data") String clientData,
+    public String joinSession(@AuthenticationPrincipal UserDetailsImpl user,
+                              @RequestParam(name = "data") String clientData,
                               @RequestParam(name = "session-name") String sessionName,
                               Model model,
                               HttpSession httpSession,
                               RedirectAttributes redirectAttributes) {
 
-        try {
-            checkUserLogged(httpSession);
-        } catch (Exception e) {
+        if(user==null) {
             return "index";
         }
         System.out.println("Getting sessionId and token | {sessionName}={" + sessionName + "}");
 
         // Role associated to this user
-        OpenViduRole role = UserController.users.get(httpSession.getAttribute("loggedUser")).role;
-
+        System.out.println("before session");
+        System.out.println("session value "+httpSession.getAttribute("loggedUser") );
+        //OpenViduRole role = UserController.users.get(httpSession.getAttribute("loggedUser")).role;
+         OpenViduRole role=OpenViduRole.PUBLISHER;
         // Optional data to be passed to other users when this user connects to the
         // video-call. In this case, a JSON with the value we stored in the HttpSession
         // object on login
+
         String serverData = "{\"serverData\": \"" + httpSession.getAttribute("loggedUser") + "\"}";
 
         // Build connectionProperties object with the serverData and the role
@@ -86,6 +90,7 @@ public class SessionController {
 //                    model.addAttribute("username", httpSession.getAttribute("loggedUser"));
 //                    return "redirect:/dashboard";
 //                }
+
                 if (this.mapSessions.get(sessionName) != null) {
                     // Session already exists
                     System.out.println("Existing session " + sessionName);

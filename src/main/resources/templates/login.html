@@ -16,11 +16,17 @@
 	<!-- Bootstrap -->
 
 	<link rel="styleSheet" href="style.css" type="text/css" media="screen"></link>
+	<script>
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip({
+				html: true
+			});
+		});
+	</script>
 </head>
 
 <body>
 
-<div class="alert alert-error text-center" role="alert" th:text="${error}" th:if="${error}"></div>
 	<nav class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
@@ -33,41 +39,46 @@
 	</nav>
 
 	<div id="main-container" class="container">
-		<div id="logged">
-			<div id="join" class="vertical-center">
-				<div id="img-div"><img src="images/openvidu_grey_bg_transp_cropped.png" /></div>
-				<div id="join-dialog" class="jumbotron">
-					<h1>Join a video session</h1>
-					<form class="form-group" action="/session" method="post">
-						<p>
-							<label>Participant</label>
-							<input class="form-control" type="text" name="data" th:value="${username}" required="true"></input>
-						</p>
-						<p>
-							<label>Session</label>
-							<input class="form-control" type="text" name="session-name" required="true"></input>
-						</p>
-						<p class="text-center">
-							<button class="btn btn-lg btn-success" type="submit">Join!</button>
-						</p>
-					</form>
-					<hr></hr>
-					<div id="login-info">
-						<div>Logged as <span th:text="${username}" id="name-user"></span></div>
-						<form action="/logout" method="post">
-							<button id="logout-btn" class="btn btn-warning" type="submit">Log out</button>
-						</form>
-					</div>
-				</div>
-			</div>
+		<div id="not-logged" class="vertical-center">
+			<div id="img-div"><img src="images/openvidu_grey_bg_transp_cropped.png" /></div>
+			<form class="form-group jumbotron" action="/login" method="POST">
+				<p>
+					<label>User</label>
+					<input class="form-control" type="text" name="username" required="true"></input>
+				</p>
+				<p>
+					<label>Pass</label>
+					<input class="form-control" type="password" name="password" required="true"></input>
+				</p>
+				<p class="text-center">
+					<button class="btn btn-lg btn-info" type="submit">Log in</button>
+				</p>
+			</form>
+			<table class="table">
+				<tr>
+					<th>User</th>
+					<th>Pass</th>
+					<th>Role<i data-toggle="tooltip" data-placement="bottom" title="" data-original-title="&lt;div id='tooltip-div'&gt;PUBLISHER&lt;div&gt;Send and receive media&lt;hr&gt;&lt;/div&gt;SUBSCRIBER&lt;div&gt;Receive media&lt;/div&gt;&lt;/div&gt;"
+						    class="glyphicon glyphicon-info-sign"></i></th>
+				</tr>
+				<tr>
+					<td>publisher1</td>
+					<td>pass</td>
+					<td>PUBLISHER</td>
+				</tr>
+				<tr>
+					<td>publisher2</td>
+					<td>pass</td>
+					<td>PUBLISHER</td>
+				</tr>
+				<tr>
+					<td>subscriber</td>
+					<td>pass</td>
+					<td>SUBSCRIBER</td>
+				</tr>
+			</table>
 		</div>
 	</div>
-
-<form action="/scheduleMeeting" >
-	<button type="submit">Schedule meeting</button>
-</form>
-
-</a>
 
 	<footer class="footer">
 		<div class="container">
@@ -78,10 +89,4 @@
 
 </body>
 
-<!--<script>-->
-<!--	window.onload = function () { // Generate participant info-->
-<!--		$("input[name='session-name']").val("Session " + Math.floor(Math.random() * 10));-->
-<!--		$("input[name='data']").val("Participant " + Math.floor(Math.random() * 100));-->
-<!--	}-->
-<!--</script>-->
 </html>
