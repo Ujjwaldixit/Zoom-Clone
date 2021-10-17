@@ -1,4 +1,4 @@
-package com.zoom.service.impl;
+package com.zoom.service;
 
 import com.zoom.model.User;
 
