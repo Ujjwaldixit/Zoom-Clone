@@ -33,7 +33,6 @@ public class MeetingServiceImpl implements MeetingService {
     public void saveMeetingSchedule(Meeting meeting){
         try {
             meeting.setActive(true);
-            meeting.setSessionToken(sessionTokenGenerator.generateToken());
             meetingRepository.save(meeting);
         }catch (Exception e){
             e.printStackTrace();

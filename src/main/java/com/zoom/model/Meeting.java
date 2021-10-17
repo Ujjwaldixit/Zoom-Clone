@@ -26,5 +26,4 @@ public class Meeting {
 
     private boolean isActive;
 
-    private String sessionToken;
 }
