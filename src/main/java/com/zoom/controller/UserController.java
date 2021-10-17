@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import io.openvidu.java.client.OpenViduRole;
 
 @Controller
-public class LoginController {
+public class UserController {
 
 	public class MyUser {
 
@@ -31,7 +31,7 @@ public class LoginController {
 
 	public static Map<String, MyUser> users = new ConcurrentHashMap<>();
 
-	public LoginController() {
+	public UserController() {
 		users.put("publisher1", new MyUser("publisher1", "pass", OpenViduRole.PUBLISHER));
 		users.put("publisher2", new MyUser("publisher2", "pass", OpenViduRole.PUBLISHER));
 		users.put("subscriber", new MyUser("subscriber", "pass", OpenViduRole.SUBSCRIBER));
