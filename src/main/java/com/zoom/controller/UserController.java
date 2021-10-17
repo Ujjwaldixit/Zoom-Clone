@@ -23,27 +23,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	public class MyUser {
-
-		String name;
-		String pass;
-		OpenViduRole role;
-
-		public MyUser(String name, String pass, OpenViduRole role) {
-			this.name = name;
-			this.pass = pass;
-			this.role = role;
-		}
-	}
-
-	public static Map<String, MyUser> users = new ConcurrentHashMap<>();
-
-	public UserController() {
-		users.put("publisher1", new MyUser("publisher1", "pass", OpenViduRole.PUBLISHER));
-		users.put("publisher2", new MyUser("publisher2", "pass", OpenViduRole.PUBLISHER));
-		users.put("subscriber", new MyUser("subscriber", "pass", OpenViduRole.SUBSCRIBER));
-	}
-
 	@RequestMapping(value = "/")
 	public String logout(HttpSession httpSession) {
 		if (checkUserLogged(httpSession)) {
