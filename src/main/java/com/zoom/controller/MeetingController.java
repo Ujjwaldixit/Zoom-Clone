@@ -47,15 +47,15 @@ public class MeetingController {
                                       @RequestParam("startDate") String startDate,
                                       @RequestParam("startTime") String startTime) throws ParseException {
 
-        LocalDate ld=LocalDate.parse(startDate);
+        LocalDate localDate=LocalDate.parse(startDate);
 
-        LocalTime lt=LocalTime.parse(startTime);
+        LocalTime localTime=LocalTime.parse(startTime);
 
-        String formattedDate = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        ld=LocalDate.parse(formattedDate);
+        localDate=LocalDate.parse(formattedDate);
 
-        LocalDateTime localDateTime = lt.atDate(ld);
+        LocalDateTime localDateTime = localTime.atDate(localDate);
         meeting.setStartDateTime(Timestamp.valueOf(localDateTime));
 
         meetingService.saveMeetingSchedule(meeting);
