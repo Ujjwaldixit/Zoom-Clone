@@ -7,7 +7,9 @@ import javax.servlet.http.HttpSession;
 
 import com.zoom.model.User;
 import com.zoom.service.UserService;
+import com.zoom.service.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,40 +54,19 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET, RequestMethod.POST })
-	public String login(@RequestParam(name = "user", required = false) String user,
-			@RequestParam(name = "pass", required = false) String pass, Model model, HttpSession httpSession) {
+	@GetMapping(value = "/login")
+	public String displayLoginForm() {
 
-		// Check if the user is already logged in
-		String userName = (String) httpSession.getAttribute("loggedUser");
-		if (userName != null) {
-			// User is already logged. Immediately return dashboard
-			model.addAttribute("username", userName);
-			return "dashboard";
-		}
-
-		// User wasn't logged and wants to
-		if (login(user, pass)) { // Correct user-pass
-
-			// Validate session and return OK
-			// Value stored in HttpSession allows us to identify the user in future requests
-			httpSession.setAttribute("loggedUser", user);
-			model.addAttribute("username", user);
-
-			// Return dashboard.html template
-			return "dashboard";
-
-		} else { // Wrong user-pass
-			// Invalidate session and redirect to index.html
-			httpSession.invalidate();
-			return "redirect:/";
-		}
+		return "login";
 	}
 
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public String logout(Model model, HttpSession httpSession) {
-		httpSession.invalidate();
-		return "redirect:/";
+	@GetMapping("/dashboard")
+	public String dashboard(@AuthenticationPrincipal UserDetailsImpl user,
+							HttpSession httpSession,
+							Model model){
+		httpSession.setAttribute("loggedUser",user.getName());
+		model.addAttribute("username",user.getName());
+		return "dashboard";
 	}
 
 	@GetMapping("/register")
@@ -105,11 +86,6 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("error", "!!! Already Registered !!!");
 		}
 		return "redirect:/";
-	}
-
-
-	private boolean login(String user, String pass) {
-		return (user != null && pass != null && users.containsKey(user) && users.get(user).pass.equals(pass));
 	}
 
 	private boolean checkUserLogged(HttpSession httpSession) {
