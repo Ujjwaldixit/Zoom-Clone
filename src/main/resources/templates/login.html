@@ -30,7 +30,8 @@
 	<nav class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="/"><img class="demo-logo" src="images/openvidu_vert_white_bg_trans_cropped.png"/> MVC Java</a>
+				<a class="navbar-brand" href="/">
+					<img class="demo-logo" src="images/openvidu_vert_white_bg_trans_cropped.png"/> MVC Java</a>
 				<a class="navbar-brand nav-icon" href="https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-mvc-java" title="GitHub Repository"
 				    target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
 				<a class="navbar-brand nav-icon" href="http://www.docs.openvidu.io/en/stable/tutorials/openvidu-mvc-java/" title="Documentation" target="_blank"><i class="fa fa-book" aria-hidden="true"></i></a>
@@ -40,20 +41,21 @@
 
 	<div id="main-container" class="container">
 		<div id="not-logged" class="vertical-center">
-			<div id="img-div"><img src="images/openvidu_grey_bg_transp_cropped.png" /></div>
-			<form class="form-group jumbotron" action="/login" method="POST">
+<!--			<div id="img-div"><img src="images/openvidu_grey_bg_transp_cropped.png" /></div>-->
+			<form class="form-group jumbotron" th:action="@{/login}" th:method="post">
 				<p>
 					<label>User</label>
-					<input class="form-control" type="text" name="username" required="true"></input>
+					<input class="form-control" th:type="text" th:name="username" required="true"></input>
 				</p>
 				<p>
 					<label>Pass</label>
-					<input class="form-control" type="password" name="password" required="true"></input>
+					<input class="form-control" th:type="password" th:name="password" required="true"></input>
 				</p>
 				<p class="text-center">
-					<button class="btn btn-lg btn-info" type="submit">Log in</button>
+					<button class="btn btn-lg btn-info" th:type="submit">Log in</button>
 				</p>
 			</form>
+
 			<table class="table">
 				<tr>
 					<th>User</th>

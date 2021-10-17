@@ -39,6 +39,15 @@
 			<div id="session">
 				<div id="session-header">
 					<h1 th:text="${sessionName}" id="session-title"></h1>
+<!--				make a form then add onclick with it should call a function <form></form>-->
+					<p id="receiver"></p>
+
+<!--					<form method="post">-->
+						<label> Send messages</label>
+						<input type="text" name="session-name" id="chat" value="Hi!"/>
+						<input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>
+<!--						<input type="hidden" name="token" th:value="${token}"></input>-->
+<!--					</form>-->
 					<form action="/leave-session" method="post">
 						<input type="hidden" name="session-name" th:value="${sessionName}"></input>
 						<input type="hidden" name="token" th:value="${token}"></input>
@@ -116,6 +125,14 @@
 	// --- 4) Connect to the session passing the retrieved token and some more data from
 	//        the client (in this case a JSON with the nickname chosen by the user) ---
 
+	session.on('signal', (event) => {
+		document.getElementById("receiver").value = event.data;
+		console.log(event.data); // Message
+		console.log(event.from); // Connection object of the sender
+		console.log(event.type); // The type of message
+	});
+
+
 	session.connect(token, { clientData: nickName })
 		.then(() => {
 
@@ -172,6 +189,30 @@
 		.catch(error => {
 			console.warn('There was an error connecting to the session:', error.code, error.message);
 		});
+
+	//
+	function sendChatMessage(){
+		session.signal({
+			data: document.getElementById("chat").value,  // Any string (optional)
+			to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+			type: 'my-chat'             // The type of message (optional)
+			})
+			.then(() => {
+				console.log('Message successfully sent');
+				console.log(document.getElementById("chat").value);
+				document.getElementById("receiver").value = document.getElementById("chat").value;
+				session.on('signal', (event) => {
+					document.getElementById("receiver").value = event.data;
+					console.log(event.data); // Message
+					console.log(event.from); // Connection object of the sender
+					console.log(event.type); // The type of message ("my-chat")
+				});
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	}
+
 
 
 	function leaveSession() {
