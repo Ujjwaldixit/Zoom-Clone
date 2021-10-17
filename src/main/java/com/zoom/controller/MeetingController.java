@@ -1,6 +1,7 @@
 package com.zoom.controller;
 
 import com.zoom.helper.PasswordGenerator;
+import com.zoom.helper.SessionTokenGenerator;
 import com.zoom.model.Meeting;
 import com.zoom.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
