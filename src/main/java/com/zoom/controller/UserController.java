@@ -5,11 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import com.zoom.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import io.openvidu.java.client.OpenViduRole;
 
@@ -82,6 +81,18 @@ public class UserController {
 		httpSession.invalidate();
 		return "redirect:/";
 	}
+
+	@GetMapping("/register")
+	public String showRegistrationForm(Model model) {
+		model.addAttribute("user",new User());
+		return "registrationForm";
+	}
+
+	@PostMapping("/register")
+	public void register(@ModelAttribute("user")User user){
+
+	}
+
 
 	private boolean login(String user, String pass) {
 		return (user != null && pass != null && users.containsKey(user) && users.get(user).pass.equals(pass));
