@@ -6,14 +6,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpSession;
 
 import com.zoom.model.User;
+import com.zoom.service.impl.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import io.openvidu.java.client.OpenViduRole;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
+
+	@Autowired
+	private UserService userService;
 
 	public class MyUser {
 
@@ -85,12 +92,20 @@ public class UserController {
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
 		model.addAttribute("user",new User());
+		System.out.println("user Controller");
 		return "registrationForm";
 	}
 
 	@PostMapping("/register")
-	public void register(@ModelAttribute("user")User user){
-
+	public String register(@ModelAttribute("user")User user,
+						 RedirectAttributes redirectAttributes){
+		boolean checkRegistered = userService.register(user);
+		if (checkRegistered) {
+			redirectAttributes.addFlashAttribute("success", "!!! Registered Successfully !!!");
+		} else {
+			redirectAttributes.addFlashAttribute("error", "!!! Already Registered !!!");
+		}
+		return "redirect:/register";
 	}
 
 

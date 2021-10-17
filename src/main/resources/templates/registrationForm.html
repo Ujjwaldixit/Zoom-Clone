@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org/">
 <head>
     <title>openvidu-mvc-java</title>
 
@@ -42,10 +41,12 @@
 <div id="main-container" class="container">
     <div id="not-logged" class="vertical-center">
         <div id="img-div"><img src="images/openvidu_grey_bg_transp_cropped.png" /></div>
-        <form class="form-group jumbotron" action="/register" method="post" th:object="${user}">
+        <form class="form-group jumbotron" action="/register" method="POST" th:object="${user}">
+            <div class="alert alert-success text-center" role="alert" th:text="${success}" th:if="${success}"></div>
+            <div class="alert alert-error text-center" role="alert" th:text="${error}" th:if="${error}"></div>
             <p>
                 <label>User</label>
-                <input class="form-control" type="text" th:field="*{name}" required="true"></input>
+                <input class="form-control" type="text" th:field="*{username}" required="true"></input>
             </p>
             <p>
                 <label>Password</label>

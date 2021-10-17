@@ -13,9 +13,6 @@ public class MeetingServiceImpl implements MeetingService {
     @Autowired
     private MeetingRepository meetingRepository;
 
-    @Autowired
-    private SessionTokenGenerator sessionTokenGenerator;
-
     private OpenVidu openVidu;
 
     @Override
