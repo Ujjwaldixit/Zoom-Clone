@@ -83,6 +83,7 @@ input:checked + .slider:before {
 }
 
 
+
     </style>
 
 </head>
@@ -125,8 +126,7 @@ input:checked + .slider:before {
                 <form action="/leave-session" method="post">
                     <input type="hidden" name="session-name" th:value="${sessionName}"></input>
                     <input type="hidden" name="token" th:value="${token}"></input>
-                    <button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit"
-                            onclick="leaveSession()">
+                    <button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit" onclick="leaveSession()">
                         Leave session
                     </button>
                 </form>
@@ -142,6 +142,8 @@ input:checked + .slider:before {
                     <input type="checkbox" id="Audio" checked onclick="toggleAudio()">
                     <span class="slider round"></span>
                 </label>
+
+                <button id="shareScreen" class="btn btn-large btn-success"  onclick="screenShare()">Share</button>
 
             </div>
             <div id="main-video" class="col-md-6">
@@ -173,7 +175,8 @@ input:checked + .slider:before {
 	var nickName = [[${ nickName }]];
 	var userName = [[${ userName }]];
 	var publisher;
-
+    var session;
+    var OV;
 	console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
 
 	// --- 1) Get an OpenVidu object ---
@@ -398,6 +401,36 @@ input:checked + .slider:before {
 		publisher.publishAudio(false);
 		}
 	}
+
+	function screenShare(){
+	    var OV = new OpenVidu();
+	    console.log("share")
+        var sessionScreen = OV.initSession();
+        console.log("share1")
+            console.log("share2")
+            console.log("share 44"+token)
+           sessionScreen.connect(token).then(() => {
+                 console.log("shar77")
+                publisher = OV.initPublisher("html-element-id", { videoSource: "screen" });
+                console.log("share3")
+                publisher.once('accessAllowed', (event) => {
+                    publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+                        console.log('User pressed the "Stop sharing" button');
+                    });
+                    sessionScreen.publish(publisher);
+
+                });
+
+                publisher.once('accessDenied', (event) => {
+                    console.warn('ScreenShare: Access Denied');
+                });
+
+            }).catch((error => {
+                console.warn('There was an error connecting to the session:', error.code, error.message);
+
+            }));
+	}
+
 </script>
 
 </html>
