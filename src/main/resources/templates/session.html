@@ -91,30 +91,12 @@ input:checked + .slider:before {
 
 <body>
 
-<nav class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">
-                <img class="demo-logo" src="images/openvidu_vert_white_bg_trans_cropped.png"/> MVC Java</a>
-            <a class="navbar-brand nav-icon"
-               href="https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-mvc-java"
-               title="GitHub Repository"
-               target="_blank">
-                <i class="fa fa-github" aria-hidden="true"></i>
-            </a>
-            <a class="navbar-brand nav-icon" href="http://www.docs.openvidu.io/en/stable/tutorials/openvidu-mvc-java/"
-               title="Documentation" target="_blank">
-                <i class="fa fa-book" aria-hidden="true"></i>
-            </a>
-        </div>
-    </div>
-</nav>
-
 <div id="main-container" class="container">
+    <div id="img-div"><img src="images/zoom_icon.png" /></div>
     <div id="logged">
         <div id="session">
             <div id="session-header">
-                <h1 th:text="${sessionName}" id="session-title"></h1>
+                <h4 th:text="${sessionName}" id="session-title"></h4>
                 <!--				make a form then add onclick with it should call a function <form></form>-->
                 <p id="receiver"></p>
 
@@ -125,8 +107,8 @@ input:checked + .slider:before {
                 <!--						<input type="hidden" name="token" th:value="${token}"></input>-->
                 <!--					</form>-->
                 <form action="/leave-session" method="post">
-                    <input type="hidden" name="session-name" th:value="${sessionName}"></input>
-                    <input type="hidden" name="token" th:value="${token}"></input>
+                    <input type="hidden" name="session-name" th:value="${sessionName}"/>
+                    <input type="hidden" name="token" th:value="${token}"/>
                     <button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit" onclick="leaveSession()">
                         Leave session
                     </button>
@@ -139,7 +121,7 @@ input:checked + .slider:before {
                 </label>
 
                 <label>Mic</label>
-                <label class="switch">Audio
+                <label class="switch">
                     <input type="checkbox" id="Audio" checked onclick="toggleAudio()">
                     <span class="slider round"></span>
                 </label>
@@ -157,14 +139,6 @@ input:checked + .slider:before {
     </div>
 </div>
 <input type="text" id="mytext">
-<footer class="footer">
-    <div class="container">
-        <div class="text-muted">OpenVidu © 2017</div>
-        <a href="http://www.openvidu.io/" target="_blank">
-            <img class="openvidu-logo" src="images/openvidu_globe_bg_transp_cropped.png"/>
-        </a>
-    </div>
-</footer>
 </body>
 
 <script th:inline="javascript">
@@ -230,7 +204,7 @@ input:checked + .slider:before {
 
 			// --- 5) Set page layout for active call ---
 
-			$('#session-title').text(sessionName);
+			$('#session-title').text("Session "+sessionName);
 			$('#join').hide();
 			$('#session').show();
 
