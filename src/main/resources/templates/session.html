@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>openvidu-mvc-java</title>
@@ -155,7 +156,7 @@ input:checked + .slider:before {
         </div>
     </div>
 </div>
-
+<input type="text" id="mytext">
 <footer class="footer">
     <div class="container">
         <div class="text-muted">OpenVidu © 2017</div>
@@ -164,7 +165,6 @@ input:checked + .slider:before {
         </a>
     </div>
 </footer>
-
 </body>
 
 <script th:inline="javascript">
@@ -219,7 +219,7 @@ input:checked + .slider:before {
 	//        the client (in this case a JSON with the nickname chosen by the user) ---
 
 	session.on('signal', (event) => {
-		document.getElementById("receiver").value = event.data;
+		document.getElementById("mytext").value = event.data;
 		console.log(event.data); // Message
 		console.log(event.from); // Connection object of the sender
 		console.log(event.type); // The type of message
@@ -287,7 +287,7 @@ input:checked + .slider:before {
 		session.signal({
 			data: document.getElementById("chat").value,  // Any string (optional)
 			to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-			type: 'my-chat'             // The type of message (optional)
+			type:'my-chat'            // The type of message (optional)
 			})
 			.then(() => {
 				console.log('Message successfully sent');
