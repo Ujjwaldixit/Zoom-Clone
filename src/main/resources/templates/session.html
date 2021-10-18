@@ -1,78 +1,160 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-	<title>openvidu-mvc-java</title>
+    <title>openvidu-mvc-java</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
-	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"></link>
 
-	<!-- Bootstrap -->
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-	<!-- Bootstrap -->
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"></link>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+    <!-- Bootstrap -->
 
-	<link rel="styleSheet" href="style.css" type="text/css" media="screen"></link>
-	<script src="openvidu-browser-2.20.0.js"></script>
+    <link rel="styleSheet" href="style.css" type="text/css" media="screen"></link>
+    <script src="openvidu-browser-2.20.0.js"></script>
+    <style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+    </style>
+
 </head>
 
 <body>
 
-	<nav class="navbar navbar-default">
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="/">
-					<img class="demo-logo" src="images/openvidu_vert_white_bg_trans_cropped.png" /> MVC Java</a>
-				<a class="navbar-brand nav-icon" href="https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-mvc-java" title="GitHub Repository"
-				 target="_blank">
-					<i class="fa fa-github" aria-hidden="true"></i>
-				</a>
-				<a class="navbar-brand nav-icon" href="http://www.docs.openvidu.io/en/stable/tutorials/openvidu-mvc-java/" title="Documentation" target="_blank">
-					<i class="fa fa-book" aria-hidden="true"></i>
-				</a>
-			</div>
-		</div>
-	</nav>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                <img class="demo-logo" src="images/openvidu_vert_white_bg_trans_cropped.png"/> MVC Java</a>
+            <a class="navbar-brand nav-icon"
+               href="https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-mvc-java"
+               title="GitHub Repository"
+               target="_blank">
+                <i class="fa fa-github" aria-hidden="true"></i>
+            </a>
+            <a class="navbar-brand nav-icon" href="http://www.docs.openvidu.io/en/stable/tutorials/openvidu-mvc-java/"
+               title="Documentation" target="_blank">
+                <i class="fa fa-book" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+</nav>
 
-	<div id="main-container" class="container">
-		<div id="logged">
-			<div id="session">
-				<div id="session-header">
-					<h1 th:text="${sessionName}" id="session-title"></h1>
-<!--				make a form then add onclick with it should call a function <form></form>-->
-					<p id="receiver"></p>
+<div id="main-container" class="container">
+    <div id="logged">
+        <div id="session">
+            <div id="session-header">
+                <h1 th:text="${sessionName}" id="session-title"></h1>
+                <!--				make a form then add onclick with it should call a function <form></form>-->
+                <p id="receiver"></p>
 
-<!--					<form method="post">-->
-						<label> Send messages</label>
-						<input type="text" name="session-name" id="chat" value="Hi!"/>
-						<input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>
-<!--						<input type="hidden" name="token" th:value="${token}"></input>-->
-<!--					</form>-->
-					<form action="/leave-session" method="post">
-						<input type="hidden" name="session-name" th:value="${sessionName}"></input>
-						<input type="hidden" name="token" th:value="${token}"></input>
-						<button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit" onclick="leaveSession()">
-							Leave session</button>
-					</form>
-				</div>
-				<div id="main-video" class="col-md-6">
-					<p class="nickName"></p>
-					<p class="userName"></p>
-					<video autoplay="autoplay" playsinline="true"></video>
-				</div>
-				<div id="video-container" class="col-md-6"></div>
-			</div>
-		</div>
-	</div>
+                <!--					<form method="post">-->
+                <label> Send messages</label>
+                <input type="text" name="session-name" id="chat" value="Hi!"/>
+                <input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>
+                <!--						<input type="hidden" name="token" th:value="${token}"></input>-->
+                <!--					</form>-->
+                <form action="/leave-session" method="post">
+                    <input type="hidden" name="session-name" th:value="${sessionName}"></input>
+                    <input type="hidden" name="token" th:value="${token}"></input>
+                    <button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit"
+                            onclick="leaveSession()">
+                        Leave session
+                    </button>
+                </form>
 
-	<footer class="footer">
-		<div class="container">
-			<div class="text-muted">OpenVidu © 2017</div>
-			<a href="http://www.openvidu.io/" target="_blank">
-				<img class="openvidu-logo" src="images/openvidu_globe_bg_transp_cropped.png" />
-			</a>
-		</div>
-	</footer>
+<!--                <button class="btn btn-large btn-danger" type="submit" onclick="disableVideo()">OFF</button>-->
+<!--                <button class="btn btn-large btn-danger" type="submit" onclick="enableVideo()">OFF</button>-->
+                <label class="switch">
+                    <input type="checkbox" id="Camera" checked onclick="toggleVideo()">
+                    <span class="slider round"></span>
+                </label>
+
+            </div>
+            <div id="main-video" class="col-md-6">
+                <p class="nickName"></p>
+                <p class="userName"></p>
+                <video autoplay="autoplay" playsinline="true"></video>
+            </div>
+            <div id="video-container" class="col-md-6"></div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="text-muted">OpenVidu © 2017</div>
+        <a href="http://www.openvidu.io/" target="_blank">
+            <img class="openvidu-logo" src="images/openvidu_globe_bg_transp_cropped.png"/>
+        </a>
+    </div>
+</footer>
 
 </body>
 
@@ -83,6 +165,7 @@
 	var token = [[${ token }]];
 	var nickName = [[${ nickName }]];
 	var userName = [[${ userName }]];
+	var publisher;
 
 	console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
 
@@ -132,7 +215,6 @@
 		console.log(event.type); // The type of message
 	});
 
-
 	session.connect(token, { clientData: nickName })
 		.then(() => {
 
@@ -151,7 +233,7 @@
 
 				// --- 6) Get your own camera stream ---
 
-				var publisher = OV.initPublisher('video-container', {
+					 publisher = OV.initPublisher('video-container', {
 					audioSource: undefined, // The source of audio. If undefined default microphone
 					videoSource: undefined, // The source of video. If undefined default webcam
 					publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
@@ -288,6 +370,16 @@
 
 	function isPublisher() {
 		return userName.includes('publisher');
+	}
+
+	function toggleVideo(){
+	var camera = document.getElementById("Camera");
+	    if (camera.checked){
+	    publisher.publishVideo(true);
+	    }
+	    else{
+		publisher.publishVideo(false);
+		}
 	}
 </script>
 
