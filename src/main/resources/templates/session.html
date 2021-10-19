@@ -83,7 +83,10 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-
+.mytext{
+color:white;
+padding:20px;
+}
 
 
 
@@ -150,6 +153,9 @@ input:checked + .slider:before {
   margin-bottom: 10px;
 }
 
+.sticky-TextBox{
+  padding:20px;
+}
     </style>
 </head>
 
@@ -157,16 +163,15 @@ input:checked + .slider:before {
 <div id="mySidebar" class="sidebar">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
     <div id="myDIV">
-        A DIV element
     </div>
-    <div class="sticky">
+    <div class="sticky-TextBox">
         <input type="text" name="session-name" id="chat" value="Hi!"/>
         <input id="sendChat" type="submit" onclick="displayChat(); sendChatMessage()" value="Send">
     </div>
 </div>
 
 <div id="main">
-    <button class="openbtn" onclick="openNav()">☰ Open Sidebar</button>
+    <button class="openbtn" onclick="openNav()">☰ Chat</button>
 </div>
 
 <div id="main-container" class="container">
@@ -217,7 +222,7 @@ input:checked + .slider:before {
         </div>
     </div>
 </div>
-<input type="text" id="mytext">
+<!--<input type="text" class="mytext">-->
 </body>
 
 <script th:inline="javascript">
@@ -272,7 +277,7 @@ input:checked + .slider:before {
 	//        the client (in this case a JSON with the nickname chosen by the user) ---
 
 	session.on('signal', (event) => {
-		document.getElementById("mytext").value = event.data;
+		Document.getElementsByClassName("mytext").value = event.data;
 		console.log(event.data); // Message
 		console.log(event.from); // Connection object of the sender
 		console.log(event.type); // The type of message
@@ -500,6 +505,7 @@ function closeNav() {
 function displayChat() {
   var paraTag = document.createElement("P");
   paraTag.innerHTML =   document.getElementById("chat").value
+  paraTag.className = "mytext"
   document.getElementById("myDIV").appendChild(paraTag);
 
   var separator = document.createElement("P");
