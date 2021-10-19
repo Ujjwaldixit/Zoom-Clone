@@ -55,6 +55,7 @@ public class SessionController {
     public String joinSession(@AuthenticationPrincipal UserDetailsImpl user,
                               @RequestParam(name = "data") String clientData,
                               @RequestParam(name = "session-name") String sessionName,
+                              @RequestParam(name="password") String password,
                               Model model,
                               HttpSession httpSession,
                               RedirectAttributes redirectAttributes) {
@@ -62,6 +63,7 @@ public class SessionController {
         if(user==null) {
             return "index";
         }
+
         System.out.println("Getting sessionId and token | {sessionName}={" + sessionName + "}");
 
         // Role associated to this user
@@ -81,7 +83,13 @@ public class SessionController {
 
         try {
             Meeting meeting = meetingService.getMeetingByMeetingId(Long.parseLong(sessionName));
+
             if (meeting != null) {
+                if(!meeting.getPassCode().equals(password)){
+                    redirectAttributes.addFlashAttribute("error", "!!!Wrong Password!!!");
+                    model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+                    return "redirect:/dashboard";
+                }
                 sessionName = meeting.getMeetingId().toString();
                 System.out.println(" check time " + meeting.getStartDateTime().compareTo(new Timestamp(System.currentTimeMillis())));
 
