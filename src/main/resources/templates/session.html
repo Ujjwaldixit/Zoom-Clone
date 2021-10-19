@@ -222,7 +222,7 @@ padding:20px;
         </div>
     </div>
 </div>
-<!--<input type="text" class="mytext">-->
+<input type="text" id="mytext">
 </body>
 
 <script th:inline="javascript">
@@ -277,7 +277,7 @@ padding:20px;
 	//        the client (in this case a JSON with the nickname chosen by the user) ---
 
 	session.on('signal', (event) => {
-		Document.getElementsByClassName("mytext").value = event.data;
+		document.getElementById("mytext").value = event.data;
 		console.log(event.data); // Message
 		console.log(event.from); // Connection object of the sender
 		console.log(event.type); // The type of message
@@ -505,7 +505,7 @@ function closeNav() {
 function displayChat() {
   var paraTag = document.createElement("P");
   paraTag.innerHTML =   document.getElementById("chat").value
-  paraTag.className = "mytext"
+<!--  paraTag.className = "mytext"-->
   document.getElementById("myDIV").appendChild(paraTag);
 
   var separator = document.createElement("P");
