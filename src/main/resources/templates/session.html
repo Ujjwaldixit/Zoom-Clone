@@ -163,10 +163,11 @@ padding:20px;
 <div id="mySidebar" class="sidebar">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
     <div id="myDIV">
+        <input type="text" id="mytext">
     </div>
     <div class="sticky-TextBox">
         <input type="text" name="session-name" id="chat" value="Hi!"/>
-        <input id="sendChat" type="submit" onclick="displayChat(); sendChatMessage()" value="Send">
+        <input id="sendChat" type="submit" onclick="sendChatMessage()" value="Send">
     </div>
 </div>
 
@@ -222,7 +223,7 @@ padding:20px;
         </div>
     </div>
 </div>
-<input type="text" id="mytext">
+<!--<input type="text" id="mytext">-->
 </body>
 
 <script th:inline="javascript">

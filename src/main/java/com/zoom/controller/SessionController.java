@@ -1,6 +1,7 @@
 package com.zoom.controller;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -41,6 +42,8 @@ public class SessionController {
     // Secret shared with our OpenVidu server
     private String SECRET;
 
+    private Session session;
+
     public SessionController(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
         this.SECRET = secret;
         this.OPENVIDU_URL = openviduUrl;
@@ -51,12 +54,12 @@ public class SessionController {
     public String joinSession(@AuthenticationPrincipal UserDetailsImpl user,
                               @RequestParam(name = "data") String clientData,
                               @RequestParam(name = "session-name") String sessionName,
-                              @RequestParam(name="password") String password,
+                              @RequestParam(name = "password") String password,
                               Model model,
                               HttpSession httpSession,
                               RedirectAttributes redirectAttributes) {
 
-        if(user==null) {
+        if (user == null) {
             return "index";
         }
 
@@ -64,9 +67,9 @@ public class SessionController {
 
         // Role associated to this user
         System.out.println("before session");
-        System.out.println("session value "+httpSession.getAttribute("loggedUser") );
+        System.out.println("session value " + httpSession.getAttribute("loggedUser"));
         //OpenViduRole role = UserController.users.get(httpSession.getAttribute("loggedUser")).role;
-         OpenViduRole role=OpenViduRole.PUBLISHER;
+        OpenViduRole role = OpenViduRole.PUBLISHER;
         // Optional data to be passed to other users when this user connects to the
         // video-call. In this case, a JSON with the value we stored in the HttpSession
         // object on login
@@ -74,14 +77,16 @@ public class SessionController {
         String serverData = "{\"serverData\": \"" + httpSession.getAttribute("loggedUser") + "\"}";
 
         // Build connectionProperties object with the serverData and the role
-        ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
+        ConnectionProperties connectionProperties = new ConnectionProperties
+                .Builder()
+                .type(ConnectionType.WEBRTC)
                 .role(role).data(serverData).build();
 
         try {
             Meeting meeting = meetingService.getMeetingByMeetingId(Long.parseLong(sessionName));
 
             if (meeting != null) {
-                if(!meeting.getPassCode().equals(password)){
+                if (!meeting.getPassCode().equals(password)) {
                     redirectAttributes.addFlashAttribute("error", "!!!Wrong Password!!!");
                     model.addAttribute("username", httpSession.getAttribute("loggedUser"));
                     return "redirect:/dashboard";
@@ -120,14 +125,13 @@ public class SessionController {
                         model.addAttribute("username", httpSession.getAttribute("loggedUser"));
                         return "dashboard";
                     }
-                }
-                else {
+                } else {
                     // New session
                     System.out.println("New session " + sessionName);
                     try {
 
                         // Create a new OpenVidu Session
-                        Session session = this.openVidu.createSession();
+                        session = this.openVidu.createSession();
                         // Generate a new token with the recently created connectionProperties
                         String token = session.createConnection(connectionProperties).getToken();
 
@@ -151,14 +155,13 @@ public class SessionController {
                         return "dashboard";
                     }
                 }
-            }
-            else {
+            } else {
                 // New session
                 System.out.println("New session " + sessionName);
                 try {
 
                     // Create a new OpenVidu Session
-                    Session session = this.openVidu.createSession();
+                    session = this.openVidu.createSession();
                     // Generate a new token with the recently created connectionProperties
                     String token = session.createConnection(connectionProperties).getToken();
 
@@ -182,8 +185,7 @@ public class SessionController {
                     return "dashboard";
                 }
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "!!!Invalid Session Id!!!");
             model.addAttribute("username", httpSession.getAttribute("loggedUser"));
             return "redirect:/dashboard";
@@ -245,5 +247,4 @@ public class SessionController {
             throw new Exception("User not logged");
         }
     }
-
 }
