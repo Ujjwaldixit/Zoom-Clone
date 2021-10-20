@@ -460,34 +460,65 @@ padding:20px;
 		}
 	}
 
-	function screenShare(){
-	    var OV = new OpenVidu();
-	    console.log("share")
-        var sessionScreen = OV.initSession();
-        console.log("share1")
-            console.log("share2")
-            console.log("share 44"+token)
-           sessionScreen.connect(token).then(() => {
-                 console.log("shar77")
-                publisher = OV.initPublisher("html-element-id", { videoSource: "screen" });
-                console.log("share3")
-                publisher.once('accessAllowed', (event) => {
-                    publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-                        console.log('User pressed the "Stop sharing" button');
-                    });
-                    sessionScreen.publish(publisher);
+function screenShare(){
+var OV = new OpenVidu();
+var sessionScreen = OV.initSession();
+getToken().then((token) => {
+    sessionScreen.connect(token).then(() => {
+        var publisher = OV.initPublisher("html-element-id", { videoSource: "screen" });
 
-                });
+        publisher.once('accessAllowed', (event) => {
+            publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+                console.log('User pressed the "Stop sharing" button');
+            });
+            sessionScreen.publish(publisher);
 
-                publisher.once('accessDenied', (event) => {
-                    console.warn('ScreenShare: Access Denied');
-                });
+        });
 
-            }).catch((error => {
-                console.warn('There was an error connecting to the session:', error.code, error.message);
+        publisher.once('accessDenied', (event) => {
+            console.warn('ScreenShare: Access Denied');
+        });
 
-            }));
-	}
+    }).catch((error => {
+        console.warn('There was an error connecting to the session:', error.code, error.message);
+
+    }));
+});
+}
+
+  function getToken(){
+    var token = [[${ token }]];
+    return Promise.resolve(token);
+  }
+
+<!--	function screenShare(){-->
+<!--	    var OV = new OpenVidu();-->
+<!--	    console.log("share")-->
+<!--        var sessionScreen = OV.initSession();-->
+<!--        console.log("share1")-->
+<!--            console.log("share2")-->
+<!--            console.log("share 44"+token)-->
+<!--           sessionScreen.connect(token).then(() => {-->
+<!--                 console.log("shar77")-->
+<!--                publisher = OV.initPublisher("html-element-id", { videoSource: "screen" });-->
+<!--                console.log("share3")-->
+<!--                publisher.once('accessAllowed', (event) => {-->
+<!--                    publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {-->
+<!--                        console.log('User pressed the "Stop sharing" button');-->
+<!--                    });-->
+<!--                    sessionScreen.publish(publisher);-->
+
+<!--                });-->
+
+<!--                publisher.once('accessDenied', (event) => {-->
+<!--                    console.warn('ScreenShare: Access Denied');-->
+<!--                });-->
+
+<!--            }).catch((error => {-->
+<!--                console.warn('There was an error connecting to the session:', error.code, error.message);-->
+
+<!--            }));-->
+<!--	}-->
 
 </script>
 

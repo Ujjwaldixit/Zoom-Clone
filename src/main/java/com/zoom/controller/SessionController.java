@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import com.zoom.model.Meeting;
 import com.zoom.service.MeetingService;
 import com.zoom.service.impl.UserDetailsImpl;
+import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,11 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import io.openvidu.java.client.ConnectionProperties;
-import io.openvidu.java.client.ConnectionType;
-import io.openvidu.java.client.OpenVidu;
-import io.openvidu.java.client.OpenViduRole;
-import io.openvidu.java.client.Session;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -228,6 +224,20 @@ public class SessionController {
             System.out.println("Problems in the app server: the SESSION does not exist");
             return "redirect:/dashboard";
         }
+    }
+
+    void recording ( String OPENVIDU_URL, String OPENVIDU_SECRET) throws OpenViduJavaClientException, OpenViduHttpException {
+        OpenVidu openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                .outputMode(Recording.OutputMode.COMPOSED)
+                .resolution("640x480")
+                .frameRate(24)
+                .build();
+        SessionProperties sessionProperties = new SessionProperties.Builder()
+                .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                .defaultRecordingProperties(recordingProperties)
+                .build();
+        Session session = openVidu.createSession(sessionProperties);
     }
 
     private void checkUserLogged(HttpSession httpSession) throws Exception {
