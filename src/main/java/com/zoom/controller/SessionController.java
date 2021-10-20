@@ -228,6 +228,20 @@ public class SessionController {
         }
     }
 
+    void recording ( String OPENVIDU_URL, String OPENVIDU_SECRET) throws OpenViduJavaClientException, OpenViduHttpException {
+        OpenVidu openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                .outputMode(Recording.OutputMode.COMPOSED)
+                .resolution("640x480")
+                .frameRate(24)
+                .build();
+        SessionProperties sessionProperties = new SessionProperties.Builder()
+                .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                .defaultRecordingProperties(recordingProperties)
+                .build();
+        Session session = openVidu.createSession(sessionProperties);
+    }
+
     private void checkUserLogged(HttpSession httpSession) throws Exception {
         if (httpSession == null || httpSession.getAttribute("loggedUser") == null) {
             throw new Exception("User not logged");
