@@ -211,6 +211,12 @@ padding:20px;
                     <span class="slider round"></span>
                 </label>
 
+                <label>Share Screen</label>
+                <label class="switch">
+                    <input type="checkbox" id="screenShare" checked onclick="toggleScreen()">
+                    <span class="slider round"></span>
+                </label>
+
                 <button id="shareScreen" class="btn btn-large btn-success" onclick="screenShare()">Share</button>
 
             </div>
@@ -461,37 +467,20 @@ padding:20px;
 		}
 	}
 
-function screenShare(){
+	function toggleScreen(){
+	var screenShare = document.getElementById("screenShare");
+	if (!screenShare.checked){
+	    OV.initPublisher('video-container', {videoSource: "screen"})
+	    }
 
-       var publisher =OV.initPublisher('video-container', {
-					audioSource: undefined,
-					videoSource: 'screen',
-					publishAudio: true,
-					publishVideo: true,
-					resolution: '640x480',
-					frameRate: 30,
-					insertMode: 'APPEND',
-					mirror: false "
-				});
+	}
 
-        publisher.once('accessAllowed', (event) => {
-            publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-                console.log('User pressed the "Stop sharing" button');
-            });
-            sessionScreen.publish(publisher);
-        });
 
-        publisher.on('videoElementCreated', (event) => {
-					// Init the main video with ours and append our data
-					var userData = {
-						nickName: nickName,
-						userName: userName
-					};
-					initMainVideo(event.element, userData);
-					appendUserData(event.element, userData);
-					$(event.element).prop('muted', true); // Mute local video
-				});
-}
+<!--function screenShare(){-->
+<!--          -->
+<!--}-->
+
+
 
 </script>
 
