@@ -186,8 +186,8 @@ padding:20px;
 
                 <!--					<form method="post">-->
                 <label> Send messages</label>
-<!--                <input type="text" name="session-name" id="chat" value="Hi!"/>-->
-<!--                <input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>-->
+                <!--                <input type="text" name="session-name" id="chat" value="Hi!"/>-->
+                <!--                <input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>-->
                 <!--						<input type="hidden" name="token" th:value="${token}"></input>-->
                 <!--					</form>-->
                 <form action="/leave-session" method="post">
@@ -208,6 +208,12 @@ padding:20px;
                 <label>Mic</label>
                 <label class="switch">
                     <input type="checkbox" id="Audio" checked onclick="toggleAudio()">
+                    <span class="slider round"></span>
+                </label>
+
+                <label>Share Screen</label>
+                <label class="switch">
+                    <input type="checkbox" id="screenShare" checked onclick="toggleScreen()">
                     <span class="slider round"></span>
                 </label>
 
@@ -461,65 +467,20 @@ padding:20px;
 		}
 	}
 
-function screenShare(){
-var OV = new OpenVidu();
-var sessionScreen = OV.initSession();
-getToken().then((token) => {
-    sessionScreen.connect(token).then(() => {
-        var publisher = OV.initPublisher("html-element-id", { videoSource: "screen" });
+	function toggleScreen(){
+	var screenShare = document.getElementById("screenShare");
+	if (!screenShare.checked){
+	    OV.initPublisher('video-container', {videoSource: "screen"})
+	    }
 
-        publisher.once('accessAllowed', (event) => {
-            publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-                console.log('User pressed the "Stop sharing" button');
-            });
-            sessionScreen.publish(publisher);
+	}
 
-        });
 
-        publisher.once('accessDenied', (event) => {
-            console.warn('ScreenShare: Access Denied');
-        });
+<!--function screenShare(){-->
+<!--          -->
+<!--}-->
 
-    }).catch((error => {
-        console.warn('There was an error connecting to the session:', error.code, error.message);
 
-    }));
-});
-}
-
-  function getToken(){
-    var token = [[${ token }]];
-    return Promise.resolve(token);
-  }
-
-<!--	function screenShare(){-->
-<!--	    var OV = new OpenVidu();-->
-<!--	    console.log("share")-->
-<!--        var sessionScreen = OV.initSession();-->
-<!--        console.log("share1")-->
-<!--            console.log("share2")-->
-<!--            console.log("share 44"+token)-->
-<!--           sessionScreen.connect(token).then(() => {-->
-<!--                 console.log("shar77")-->
-<!--                publisher = OV.initPublisher("html-element-id", { videoSource: "screen" });-->
-<!--                console.log("share3")-->
-<!--                publisher.once('accessAllowed', (event) => {-->
-<!--                    publisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {-->
-<!--                        console.log('User pressed the "Stop sharing" button');-->
-<!--                    });-->
-<!--                    sessionScreen.publish(publisher);-->
-
-<!--                });-->
-
-<!--                publisher.once('accessDenied', (event) => {-->
-<!--                    console.warn('ScreenShare: Access Denied');-->
-<!--                });-->
-
-<!--            }).catch((error => {-->
-<!--                console.warn('There was an error connecting to the session:', error.code, error.message);-->
-
-<!--            }));-->
-<!--	}-->
 
 </script>
 
