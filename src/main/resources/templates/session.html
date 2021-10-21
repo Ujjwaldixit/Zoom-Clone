@@ -463,12 +463,35 @@ padding:20px;
 
     function stopScreenShare(){
         session.unpublish(screen);
+        console.log("here1")
+        publisher = OV.initPublisher('video-container', {
+                        audioSource: undefined, // The source of audio. If undefined default microphone
+                        videoSource: undefined, // The source of video. If undefined default webcam
+                        publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
+                        publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+                        resolution: '640x480',  // The resolution of your video
+                        frameRate: 30,			// The frame rate of your video
+                        insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
+                        mirror: false       	// Whether to mirror your local video or not
+                    });
+
+        console.log("here2")
+        publisher.on('videoElementCreated', (event) => {
+					// Init the main video with ours and append our data
+					var userData = {
+						nickName: nickName,
+						userName: userName
+					};
+					initMainVideo(event.element, userData);
+					appendUserData(event.element, userData);
+					$(event.element).prop('muted', true); // Mute local video
+				});
+				console.log("here2")
         session.publish(publisher);
-        publisher.publishVideo(true);
     }
 
     function screenShare(){
-            session.unpublish(publisher);
+
             var OV = new OpenVidu();
             console.log("token "+token)
             screen = OV.initPublisher('video-container', {
@@ -487,6 +510,7 @@ padding:20px;
                     console.log('User pressed the "Stop sharing" button');
                 });
                 console.log("token1");
+                session.unpublish(publisher);
                 session.publish(screen);
             });
 
