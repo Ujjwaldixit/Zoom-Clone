@@ -197,6 +197,20 @@ padding:20px;
                         Leave session
                     </button>
                 </form>
+<!--                <label class="switch">-->
+
+<!--                <label>Record Video</label>-->
+<!--                <label class="switch">-->
+<!--                    <input type="checkbox" id="Record" checked onclick="toggleRecording()">-->
+<!--                    <span class="slider round"></span>-->
+<!--                </label>-->
+                    <button  id="Record"  onclick="startRecording()">
+                        Start Recording
+                    </button>
+
+                    <button  id="StopRecord"  onclick="stopRecording()">
+                        Stop Recording
+                    </button>
 
                 <label>Camera</label>
                 <label class="switch">
@@ -235,6 +249,7 @@ padding:20px;
 	var publisher;
     var session;
     var OV;
+    var recording;
 	console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
 
 	// --- 1) Get an OpenVidu object ---
@@ -366,7 +381,6 @@ padding:20px;
 
 
 	function leaveSession() {
-
 		// --- 9) Leave the session by calling 'disconnect' method over the Session object ---
 		session.disconnect();
 	}
@@ -489,6 +503,26 @@ padding:20px;
             }));
 	}
 
+    function startRecording(){
+        var sessionId = [[${sessionId}]];
+        var openviduRecording = new OpenVidu();
+        var OVStart = openviduRecording.initSession();
+        OVStart.startRecording(sessionId, {
+            name: sessionId+"first_video"
+        })
+            .then(response => recording = response)
+            .catch(error => console.error(error));
+    }
+
+    function stopRecording(){
+        // var sessionId = [[${sessionId}]];
+        var openviduRecording = new OpenVidu();
+        var OVStart = openviduRecording.initSession();
+
+        OVStart.stopRecording(recording.id)
+            .then(response => recording = response)
+            .catch(error => console.error(error));
+    }
 </script>
 
 <script>

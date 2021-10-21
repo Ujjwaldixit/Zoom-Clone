@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import com.zoom.model.Meeting;
 import com.zoom.service.MeetingService;
 import com.zoom.service.impl.UserDetailsImpl;
+import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,11 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import io.openvidu.java.client.ConnectionProperties;
-import io.openvidu.java.client.ConnectionType;
-import io.openvidu.java.client.OpenVidu;
-import io.openvidu.java.client.OpenViduRole;
-import io.openvidu.java.client.Session;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -131,7 +127,17 @@ public class SessionController {
                     try {
 
                         // Create a new OpenVidu Session
-                        Session session = this.openVidu.createSession();
+                        RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                                .outputMode(Recording.OutputMode.COMPOSED)
+                                .resolution("640x480")
+                                .frameRate(24)
+                                .build();
+                        SessionProperties sessionProperties = new SessionProperties.Builder()
+                                .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                                .defaultRecordingProperties(recordingProperties)
+                                .build();
+
+                        Session session = this.openVidu.createSession(sessionProperties);
                         // Generate a new token with the recently created connectionProperties
                         String token = session.createConnection(connectionProperties).getToken();
 
@@ -141,6 +147,7 @@ public class SessionController {
                         this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
                         // Add all the needed attributes to the template
+                        model.addAttribute("sessionId", session.getSessionId());
                         model.addAttribute("sessionName", sessionName);
                         model.addAttribute("token", token);
                         model.addAttribute("nickName", clientData);
@@ -160,9 +167,17 @@ public class SessionController {
                 // New session
                 System.out.println("New session " + sessionName);
                 try {
-
+                    RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                            .outputMode(Recording.OutputMode.COMPOSED)
+                            .resolution("640x480")
+                            .frameRate(12)
+                            .build();
+                    SessionProperties sessionProperties = new SessionProperties.Builder()
+                            .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                            .defaultRecordingProperties(recordingProperties)
+                            .build();
                     // Create a new OpenVidu Session
-                    Session session = this.openVidu.createSession();
+                    Session session = this.openVidu.createSession(sessionProperties);
                     // Generate a new token with the recently created connectionProperties
                     String token = session.createConnection(connectionProperties).getToken();
 
@@ -172,6 +187,7 @@ public class SessionController {
                     this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
                     // Add all the needed attributes to the template
+                    model.addAttribute("sessionId", session.getSessionId());
                     model.addAttribute("sessionName", sessionName);
                     model.addAttribute("token", token);
                     model.addAttribute("nickName", clientData);
@@ -230,10 +246,32 @@ public class SessionController {
         }
     }
 
+
+
     private void checkUserLogged(HttpSession httpSession) throws Exception {
         if (httpSession == null || httpSession.getAttribute("loggedUser") == null) {
             throw new Exception("User not logged");
         }
     }
 
+
+//    @RequestMapping(value = "/startRecording", method = RequestMethod.POST)
+//    public String startRecording(@RequestParam(name = "session-name") String sessionName,
+//                             @RequestParam(name = "token") String token, Model model, HttpSession httpSession) throws Exception {
+//
+//        try {
+//            checkUserLogged(httpSession);
+//        } catch (Exception e) {
+//            return "index";
+//        }
+//        // If the session exists ("TUTORIAL" in this case)
+//        if (this.mapSessions.get(sessionName) != null && this.mapSessionNamesTokens.get(sessionName) != null) {
+//            Session session = this.mapSessions.get(sessionName);
+//            RecordingProperties properties = new RecordingProperties.Builder()
+//                    .name("MY_FIRST_RECORDING")
+//                    .build();
+//            Recording recording = openVidu.startRecording(session.getSessionId(), properties);
+//        }
+//        return "redirect:/session";
+//    }
 }
