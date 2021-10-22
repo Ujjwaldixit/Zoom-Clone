@@ -112,6 +112,7 @@ public class SessionController {
                         this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
                         // Add all the needed attributes to the template
+                        model.addAttribute("sessionId", session.getSessionId());
                         model.addAttribute("sessionName", sessionName);
                         model.addAttribute("token", token);
                         model.addAttribute("nickName", clientData);
@@ -129,9 +130,18 @@ public class SessionController {
                     // New session
                     System.out.println("New session " + sessionName);
                     try {
-
                         // Create a new OpenVidu Session
-                        session = this.openVidu.createSession();
+                        RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                                .outputMode(Recording.OutputMode.COMPOSED)
+                                .resolution("640x480")
+                                .frameRate(24)
+                                .build();
+                        SessionProperties sessionProperties = new SessionProperties.Builder()
+                                .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                                .defaultRecordingProperties(recordingProperties)
+                                .build();
+
+                        Session session = this.openVidu.createSession(sessionProperties);
                         // Generate a new token with the recently created connectionProperties
                         String token = session.createConnection(connectionProperties).getToken();
 
@@ -141,6 +151,7 @@ public class SessionController {
                         this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
                         // Add all the needed attributes to the template
+                        model.addAttribute("sessionId", session.getSessionId());
                         model.addAttribute("sessionName", sessionName);
                         model.addAttribute("token", token);
                         model.addAttribute("nickName", clientData);
@@ -159,9 +170,18 @@ public class SessionController {
                 // New session
                 System.out.println("New session " + sessionName);
                 try {
-
                     // Create a new OpenVidu Session
-                    session = this.openVidu.createSession();
+                    RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                            .outputMode(Recording.OutputMode.COMPOSED)
+                            .resolution("640x480")
+                            .frameRate(24)
+                            .build();
+                    SessionProperties sessionProperties = new SessionProperties.Builder()
+                            .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                            .defaultRecordingProperties(recordingProperties)
+                            .build();
+
+                    Session session = this.openVidu.createSession(sessionProperties);
                     // Generate a new token with the recently created connectionProperties
                     String token = session.createConnection(connectionProperties).getToken();
 
@@ -171,6 +191,7 @@ public class SessionController {
                     this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
                     // Add all the needed attributes to the template
+                    model.addAttribute("sessionId", session.getSessionId());
                     model.addAttribute("sessionName", sessionName);
                     model.addAttribute("token", token);
                     model.addAttribute("nickName", clientData);
@@ -236,7 +257,7 @@ public class SessionController {
                 .frameRate(24)
                 .build();
         SessionProperties sessionProperties = new SessionProperties.Builder()
-                .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                .recordingMode(RecordingMode.ALWAYS) // RecordingMode.ALWAYS for automatic recording
                 .defaultRecordingProperties(recordingProperties)
                 .build();
         Session session = openVidu.createSession(sessionProperties);
