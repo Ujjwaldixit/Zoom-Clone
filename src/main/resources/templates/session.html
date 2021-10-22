@@ -292,7 +292,6 @@ padding:20px;
 </div>
 
 <div id="main-container" class="container">
-    <div id="img-div"><img src="images/zoom_icon.png"/></div>
     <div id="logged">
         <div id="session">
             <div id="session-header">
@@ -334,7 +333,6 @@ padding:20px;
             </div>
             <div id="main-video" class="col-md-6">
                 <p class="nickName"></p>
-                <p class="userName"></p>
                 <video autoplay="autoplay" playsinline="true"></video>
             </div>
             <div id="video-container" class="col-md-6"></div>
@@ -412,7 +410,6 @@ padding:20px;
 			$('#session-title').text("Session "+sessionName);
 			$('#join').hide();
 			$('#session').show();
-
 
 			// Here we check somehow if the user has 'PUBLISHER' role before
 			// trying to publish its stream. Even if someone modified the client's code and
@@ -506,7 +503,7 @@ padding:20px;
 		var dataNode = document.createElement('div');
 		dataNode.className = "data-node";
 		dataNode.id = "data-" + nodeId;
-		dataNode.innerHTML = '<p class="nickName">' + clientData + '</p><p class="userName">' + serverData + '</p>';
+<!--		dataNode.innerHTML = '<p class="nickName">' + clientData;-->
 		videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
 		addClickListener(videoElement, clientData, serverData);
 	}
@@ -581,7 +578,6 @@ padding:20px;
 
     function stopScreenShare(){
         session.unpublish(screen);
-        console.log("here1")
         publisher = OV.initPublisher('video-container', {
                         audioSource: undefined, // The source of audio. If undefined default microphone
                         videoSource: undefined, // The source of video. If undefined default webcam
@@ -593,7 +589,7 @@ padding:20px;
                         mirror: false       	// Whether to mirror your local video or not
                     });
 
-        console.log("here2")
+        session.publish(publisher);
         publisher.on('videoElementCreated', (event) => {
 					// Init the main video with ours and append our data
 					var userData = {
@@ -604,8 +600,7 @@ padding:20px;
 					appendUserData(event.element, userData);
 					$(event.element).prop('muted', true); // Mute local video
 				});
-				console.log("here2")
-        session.publish(publisher);
+
     }
 
     function screenShare(){
