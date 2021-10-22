@@ -524,9 +524,10 @@ padding:20px;
     }
 
     function startRecording(){
-        let openViduRecording = new OpenVidu();
-        // var OVStart = openviduRecording.initSession();
-        openViduRecording.startRecording(sessionId, {
+        let openviduRecording = new OpenVidu();
+        var OVStart = openviduRecording.initSession();
+        console.log(openviduRecording+"just called the startRecording");
+        OVStart.startRecording(sessionId, {
             name: sessionId+"first_video"
         })
             .then(response => recording = response)
