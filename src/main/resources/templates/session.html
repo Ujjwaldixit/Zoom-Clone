@@ -213,6 +213,8 @@ padding:20px;
 
                 <button id="shareScreen" class="btn btn-large btn-success" onclick="screenShare()">Share</button>
                 <button id="stopShareScreen" class="btn btn-large btn-success" onclick="stopScreenShare()">Stop Share</button>
+                <button id="startRecord" class="btn btn-large btn-success" onclick="startRecording()">Start Record</button>
+                <button id="startRecord" class="btn btn-large btn-success" onclick="stopRecording()">Stop Record</button>
 
             </div>
             <div id="main-video" class="col-md-6">
@@ -238,6 +240,8 @@ padding:20px;
     var session;
     var OV;
     var screen;
+    var sessionId = [[${sessionId}]];
+    var recording;
 	console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
 
 	// --- 1) Get an OpenVidu object ---
@@ -517,7 +521,29 @@ padding:20px;
             screen.once('accessDenied', (event) => {
                 console.warn('ScreenShare: Access Denied');
             });
-}
+    }
+
+    function startRecording(){
+        let openViduRecording = new OpenVidu();
+        // var OVStart = openviduRecording.initSession();
+        openViduRecording.startRecording(sessionId, {
+            name: sessionId+"first_video"
+        })
+            .then(response => recording = response)
+            .catch(error => console.error(error));
+    }
+
+    function stopRecording(){
+        // var sessionId = [[${sessionId}]];
+        if(recording != null){
+            var openviduRecording = new OpenVidu();
+            var OVStart = openviduRecording.initSession();
+
+            OVStart.stopRecording(recording.id)
+                .then(response => recording = response)
+                .catch(error => console.error(error));
+        }
+    }
 
 </script>
 
