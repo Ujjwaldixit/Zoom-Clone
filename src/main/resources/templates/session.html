@@ -3,25 +3,31 @@
 <head>
     <title>openvidu-mvc-java</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
 
     <!-- Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous"></link>
+          crossorigin="anonymous"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <!-- Bootstrap -->
 
-    <link rel="styleSheet" href="style.css" type="text/css" media="screen"></link>
+    <link rel="styleSheet" href="style.css" type="text/css" media="screen"/>
     <script src="openvidu-browser-2.20.0.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <style>
 .switch {
   position: relative;
@@ -90,6 +96,7 @@ padding:20px;
 
 
 
+
     </style>
     <style>
         .sidebar {
@@ -148,23 +155,132 @@ padding:20px;
   .sidebar {padding-top: 15px;}
   .sidebar a {font-size: 18px;}
 }
-#myDIV {
-  border: 1px solid black;
-  margin-bottom: 10px;
+.message-text {
+  color:white;
+  text-size:30px;
+  padding-left:7px;
 }
 
 .sticky-TextBox{
-  padding:20px;
+    padding:10px;
 }
     </style>
-</head>
+    <style>
 
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+</style>
+    <style>
+
+    .icon-input {
+        display: none;
+    }
+    .icons-list ul li {
+        list-style: none;
+<!--        width: 50%;-->
+        float: left;
+        text-align: center;
+    }
+    .icons-list ul li label {
+        cursor: pointer;
+        margin: 10px 25px;
+        color: #ddd;
+        background-color: #585858;
+        width: 70px;
+        height: 70px;
+        line-height: 70px;
+        font-size: 22px;
+        border-radius: 50%;
+        transition: all 0.4s;
+        opacity: 0.4;
+    }
+    .icons-list label:hover {
+        color: #ddd;
+        background-color: #333;
+        font-size: 34px;
+        opacity: 1;
+    }
+    #Audio:checked ~ .icons-list ul li .fa-microphone,
+    #Camera:checked ~ .icons-list ul li .fa-camera{
+        color: #fff;
+        font-size: 30px;
+        opacity: 1;
+    }
+    </style>
+    </style>
+</head>
+<!--<a onclick="openNav()">☰ Chat</a>-->
 <body>
+<nav>
+    <!-- Input checkbox Fields -->
+    <input class="icon-input" type="checkbox" id="Camera" checked onclick="toggleVideo()">
+    <input class="icon-input" type="checkbox" id="Audio" checked onclick="toggleAudio()">
+
+    <!-- Switch On Off Icons List -->
+    <div class="icons-list">
+        <ul>
+            <li>
+                <label class="fas fa-microphone" for="Audio"></label>
+                <label class="fas fa-camera" for="Camera"></label>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 <div id="mySidebar" class="sidebar">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
     <div id="myDIV">
-        <input type="text" id="mytext">
+        <input type="hidden" id="mytext">
     </div>
+
     <div class="sticky-TextBox">
         <input type="text" name="session-name" id="chat" value="Hi!"/>
         <input id="sendChat" type="submit" onclick="sendChatMessage()" value="Send">
@@ -186,8 +302,8 @@ padding:20px;
 
                 <!--					<form method="post">-->
                 <label> Send messages</label>
-<!--                <input type="text" name="session-name" id="chat" value="Hi!"/>-->
-<!--                <input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>-->
+                <!--                <input type="text" name="session-name" id="chat" value="Hi!"/>-->
+                <!--                <input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>-->
                 <!--						<input type="hidden" name="token" th:value="${token}"></input>-->
                 <!--					</form>-->
                 <form action="/leave-session" method="post">
@@ -199,20 +315,21 @@ padding:20px;
                     </button>
                 </form>
 
-                <label>Camera</label>
-                <label class="switch">
-                    <input type="checkbox" id="Camera" checked onclick="toggleVideo()">
-                    <span class="slider round"></span>
-                </label>
+<!--                <label>Camera</label>-->
+<!--                <label class="switch">-->
+<!--                    <input type="checkbox" id="Camera" checked onclick="toggleVideo()">-->
+<!--                    <span class="slider round"></span>-->
+<!--                </label>-->
 
-                <label>Mic</label>
-                <label class="switch">
-                    <input type="checkbox" id="Audio" checked onclick="toggleAudio()">
-                    <span class="slider round"></span>
-                </label>
+<!--                <label>Mic</label>-->
+<!--                <label class="switch">-->
+<!--                    <input type="checkbox" id="Audio" checked onclick="toggleAudio()">-->
+<!--                    <span class="slider round"></span>-->
+<!--                </label>-->
 
                 <button id="shareScreen" class="btn btn-large btn-success" onclick="screenShare()">Share</button>
-                <button id="stopShareScreen" class="btn btn-large btn-success" onclick="stopScreenShare()">Stop Share</button>
+                <button id="stopShareScreen" class="btn btn-large btn-success" onclick="stopScreenShare()">Stop Share
+                </button>
 
             </div>
             <div id="main-video" class="col-md-6">
@@ -281,6 +398,7 @@ padding:20px;
 
 	session.on('signal', (event) => {
 		document.getElementById("mytext").value = event.data;
+		displayChat();
 		console.log(event.data); // Message
 		console.log(event.from); // Connection object of the sender
 		console.log(event.type); // The type of message
@@ -304,7 +422,7 @@ padding:20px;
 
 				// --- 6) Get your own camera stream ---
 
-					 publisher = OV.initPublisher('video-container', {
+					publisher = OV.initPublisher('video-container', {
 					audioSource: undefined, // The source of audio. If undefined default microphone
 					videoSource: undefined, // The source of video. If undefined default webcam
 					publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
@@ -346,7 +464,7 @@ padding:20px;
 	//
 	function sendChatMessage(){
 		session.signal({
-			data: document.getElementById("chat").value,  // Any string (optional)
+			data: userName+'<br>'+document.getElementById("chat").value,  // Any string (optional)
 			to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
 			type:'my-chat'            // The type of message (optional)
 			})
@@ -519,11 +637,12 @@ padding:20px;
             });
 }
 
+
 </script>
 
 <script>
 function openNav() {
-  document.getElementById("mySidebar").style.width = "350px";
+  document.getElementById("mySidebar").style.width = "300px";
   document.getElementById("main").style.marginLeft = "250px";
 }
 
@@ -533,14 +652,27 @@ function closeNav() {
 }
 
 function displayChat() {
-  var paraTag = document.createElement("P");
-  paraTag.innerHTML =   document.getElementById("chat").value
-<!--  paraTag.className = "mytext"-->
-  document.getElementById("myDIV").appendChild(paraTag);
+  var message = document.createElement("P");
+  message.innerHTML=document.getElementById("mytext").value;
+  message.className="message-text";
+  document.getElementById("myDIV").appendChild(message);
 
   var separator = document.createElement("P");
-  separator.innerHTML =  "-------------------------------------------------------------------------"
+  separator.innerHTML =  "-------------------------------------------------"
+  separator.className="message-text";
   document.getElementById("myDIV").appendChild(separator);
+}
+
+</script>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
 }
 </script>
 

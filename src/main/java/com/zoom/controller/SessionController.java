@@ -247,6 +247,4 @@ public class SessionController {
             throw new Exception("User not logged");
         }
     }
-
-
 }
