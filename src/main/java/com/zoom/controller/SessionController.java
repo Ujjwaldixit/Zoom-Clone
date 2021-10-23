@@ -128,28 +128,9 @@ public class SessionController {
                     }
                 }
             } else {
-                try {
-
-                    session = this.openVidu.createSession();
-
-                    String token = session.createConnection(connectionProperties).getToken();
-
-                    this.mapSessions.put(sessionName, session);
-                    this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
-                    this.mapSessionNamesTokens.get(sessionName).put(token, role);
-
-                    model.addAttribute("sessionName", sessionName);
-                    model.addAttribute("token", token);
-                    model.addAttribute("nickName", clientData);
-                    model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
-
-                    return "session";
-
-                } catch (Exception e) {
-
-                    model.addAttribute("username", httpSession.getAttribute("loggedUser"));
-                    return "dashboard";
-                }
+                redirectAttributes.addFlashAttribute("error", "!!!Invalid Session Id!!!");
+                model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+                return "redirect:/dashboard";
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "!!!Invalid Session Id!!!");
