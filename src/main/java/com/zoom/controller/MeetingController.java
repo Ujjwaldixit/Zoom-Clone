@@ -3,7 +3,9 @@ package com.zoom.controller;
 import com.zoom.helper.PasswordGenerator;
 import com.zoom.model.Meeting;
 import com.zoom.service.MeetingService;
+import com.zoom.service.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +41,8 @@ public class MeetingController {
     }
 
     @PostMapping("/scheduleMeeting")
-    public String saveMeetingSchedule(@ModelAttribute("meeting") Meeting meeting,
+    public String saveMeetingSchedule(@AuthenticationPrincipal UserDetailsImpl user,
+                                      @ModelAttribute("meeting") Meeting meeting,
                                       @RequestParam("startDate") String startDate,
                                       @RequestParam("startTime") String startTime) throws ParseException {
 
@@ -53,7 +56,7 @@ public class MeetingController {
 
         LocalDateTime localDateTime = localTime.atDate(localDate);
         meeting.setStartDateTime(Timestamp.valueOf(localDateTime));
-
+        meeting.setMeetingHostId(user.getUser().getUserId());
         meetingService.saveMeetingSchedule(meeting);
 
         return "/dashboard";

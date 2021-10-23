@@ -26,4 +26,6 @@ public class Meeting {
 
     private boolean isActive;
 
+    private Long meetingHostId;
+
 }

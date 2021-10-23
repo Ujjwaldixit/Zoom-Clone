@@ -1,7 +1,7 @@
 <?php session_start(); ?>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>openvidu-mvc-java</title>
+    <titleSeesion</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
@@ -255,7 +255,6 @@ padding:20px;
         opacity: 1;
     }
     </style>
-    </style>
 </head>
 <!--<a onclick="openNav()">☰ Chat</a>-->
 <body>
@@ -314,21 +313,8 @@ padding:20px;
                     </button>
                 </form>
 
-<!--                <label>Camera</label>-->
-<!--                <label class="switch">-->
-<!--                    <input type="checkbox" id="Camera" checked onclick="toggleVideo()">-->
-<!--                    <span class="slider round"></span>-->
-<!--                </label>-->
-
-<!--                <label>Mic</label>-->
-<!--                <label class="switch">-->
-<!--                    <input type="checkbox" id="Audio" checked onclick="toggleAudio()">-->
-<!--                    <span class="slider round"></span>-->
-<!--                </label>-->
-
                 <button id="shareScreen" class="btn btn-large btn-success" onclick="screenShare()">Share</button>
-                <button id="stopShareScreen" class="btn btn-large btn-success" onclick="stopScreenShare()">Stop Share
-                </button>
+                <button id="stopShareScreen" class="btn btn-large btn-success" onclick="stopScreenShare()">Stop Share</button>
 
             </div>
             <div id="main-video" class="col-md-6">
@@ -576,6 +562,10 @@ padding:20px;
 		}
 	}
 
+    function test() {
+    publisher.resolution('1280x720');
+    }
+
     function stopScreenShare(){
         session.unpublish(screen);
         publisher = OV.initPublisher('video-container', {
@@ -631,8 +621,6 @@ padding:20px;
                 console.warn('ScreenShare: Access Denied');
             });
 }
-
-
 </script>
 
 <script>
