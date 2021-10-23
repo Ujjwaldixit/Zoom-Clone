@@ -94,9 +94,6 @@ color:white;
 padding:20px;
 }
 
-
-
-
     </style>
     <style>
         .sidebar {
@@ -217,9 +214,9 @@ padding:20px;
     text-align: left;
   }
 }
-</style>
-    <style>
 
+    </style>
+    <style>
     .icon-input {
         display: none;
     }
@@ -248,6 +245,7 @@ padding:20px;
         font-size: 34px;
         opacity: 1;
     }
+
     #Audio:checked ~ .icons-list ul li .fa-microphone,
     #Camera:checked ~ .icons-list ul li .fa-camera{
         color: #fff;
@@ -255,13 +253,31 @@ padding:20px;
         opacity: 1;
     }
     </style>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script>
+function hideButton() {
+  var screenShareOn = document.getElementById("ScreenShareOn");
+  var screenShareOff = document.getElementById("ScreenShareOff");
+  if (screenShareOn.style.display === "hidden") {
+    screenShareOn.style.display = "block";
+  }
+   if (screenShareOff.style.display === "hidden") {
+    screenShareOff.style.display = "block";
+  }
+   else {
+    screenShareOn.style.display = "hidden";
+  }
+}
+</script>
 </head>
-<!--<a onclick="openNav()">☰ Chat</a>-->
 <body>
 <nav>
     <!-- Input checkbox Fields -->
     <input class="icon-input" type="checkbox" id="Camera" checked onclick="toggleVideo()">
     <input class="icon-input" type="checkbox" id="Audio" checked onclick="toggleAudio()">
+    <input class="icon-input" type="submit" id="ScreenShareOn" onclick="hideButton();ScreenShare()">
+    <input type="hidden" id="ScreenShareOff" onclick="hideButton();stopScreenShare()">
+
 
     <!-- Switch On Off Icons List -->
     <div class="icons-list">
@@ -269,7 +285,20 @@ padding:20px;
             <li>
                 <label class="fas fa-microphone" for="Audio"></label>
                 <label class="fas fa-camera" for="Camera"></label>
+                <label class='fas fa-desktop' style='font-size:36px' for="ScreenShareOn"></label>
+                <label class='fas fa-desktop' style='font-size:36px;color:red;display:hidden' for="ScreenShareOff"></label>
+
             </li>
+            <l1>
+            <form action="/leave-session" method="post">
+                <input type="hidden" name="session-name" th:value="${sessionName}"/>
+                <input type="hidden" name="token" th:value="${token}"/>
+                <button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit"
+                        onclick="leaveSession()">
+                    Leave session
+                </button>
+            </form>
+            </l1>
         </ul>
     </div>
 </nav>
@@ -295,26 +324,13 @@ padding:20px;
         <div id="session">
             <div id="session-header">
                 <h4 th:text="${sessionName}" id="session-title"></h4>
-                <!--				make a form then add onclick with it should call a function <form></form>-->
                 <p id="receiver"></p>
-
-                <!--					<form method="post">-->
                 <label> Send messages</label>
-                <!--                <input type="text" name="session-name" id="chat" value="Hi!"/>-->
-                <!--                <input id="sendChat" type="submit" onclick="sendChatMessage()"> Send Message</input>-->
-                <!--						<input type="hidden" name="token" th:value="${token}"></input>-->
-                <!--					</form>-->
-                <form action="/leave-session" method="post">
-                    <input type="hidden" name="session-name" th:value="${sessionName}"/>
-                    <input type="hidden" name="token" th:value="${token}"/>
-                    <button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit"
-                            onclick="leaveSession()">
-                        Leave session
-                    </button>
-                </form>
+
 
                 <button id="shareScreen" class="btn btn-large btn-success" onclick="screenShare()">Share</button>
-                <button id="stopShareScreen" class="btn btn-large btn-success" onclick="stopScreenShare()">Stop Share</button>
+                <button id="stopShareScreen" class="btn btn-large btn-success" onclick="stopScreenShare()">Stop Share
+                </button>
 
             </div>
             <div id="main-video" class="col-md-6">
@@ -325,7 +341,6 @@ padding:20px;
         </div>
     </div>
 </div>
-<!--<input type="text" id="mytext">-->
 </body>
 
 <script th:inline="javascript">
@@ -621,6 +636,7 @@ padding:20px;
                 console.warn('ScreenShare: Access Denied');
             });
 }
+
 </script>
 
 <script>
@@ -646,6 +662,7 @@ function displayChat() {
   document.getElementById("myDIV").appendChild(separator);
 }
 
+
 </script>
 
 <script>
@@ -657,6 +674,7 @@ function myFunction() {
     x.className = "topnav";
   }
 }
+
 </script>
 
 </html>
