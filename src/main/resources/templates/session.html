@@ -275,9 +275,6 @@ function hideButton() {
     <!-- Input checkbox Fields -->
     <input class="icon-input" type="checkbox" id="Camera" checked onclick="toggleVideo()">
     <input class="icon-input" type="checkbox" id="Audio" checked onclick="toggleAudio()">
-    <input class="icon-input" type="submit" id="ScreenShareOn" onclick="hideButton();ScreenShare()">
-    <input type="hidden" id="ScreenShareOff" onclick="hideButton();stopScreenShare()">
-
 
     <!-- Switch On Off Icons List -->
     <div class="icons-list">
@@ -285,9 +282,6 @@ function hideButton() {
             <li>
                 <label class="fas fa-microphone" for="Audio"></label>
                 <label class="fas fa-camera" for="Camera"></label>
-                <label class='fas fa-desktop' style='font-size:36px' for="ScreenShareOn"></label>
-                <label class='fas fa-desktop' style='font-size:36px;color:red;display:hidden' for="ScreenShareOff"></label>
-
             </li>
             <l1>
             <form action="/leave-session" method="post">
