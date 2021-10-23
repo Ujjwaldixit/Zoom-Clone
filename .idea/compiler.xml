@@ -12,6 +12,7 @@
         <module name="Zoom-clone" />
         <module name="Zoom-Clone-Dummy" />
         <module name="Zoom-Clone" />
+        <module name="ZoomClone-Spring-Boot" />
       </profile>
     </annotationProcessing>
   </component>
@@ -21,6 +22,7 @@
       <module name="Zoom-Clone-Dummy" options="-parameters" />
       <module name="Zoom-clone" options="-parameters" />
       <module name="ZoomClone" options="-parameters" />
+      <module name="ZoomClone-Spring-Boot" options="-parameters" />
       <module name="openvidu-mvc-java" options="-parameters" />
     </option>
   </component>
