@@ -23,16 +23,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value = "/")
-	public String logout(HttpSession httpSession) {
-		if (checkUserLogged(httpSession)) {
-			return "redirect:/dashboard";
-		} else {
-			httpSession.invalidate();
-			return "index";
-		}
-	}
-
 	@GetMapping("/login")
 	public String displayLoginForm() {
 		System.out.println("inside login");
