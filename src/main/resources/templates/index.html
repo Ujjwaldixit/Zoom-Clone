@@ -15,10 +15,17 @@
             box-sizing: border-box;
         }
 
+<<<<<<< HEAD
         .container{
             min-height: 100vh;
         }
 
+=======
+
+        .container{
+            min-height: 100vh;
+        }
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
         nav{
             padding:1em;
             border:1px solid black;
@@ -43,6 +50,10 @@
         }
         .main-container {
             min-height: 90vh;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
             display: grid;
             grid-template-columns: repeat(1, 0.5fr);
             grid-template-rows: repeat(1, 0.7fr);
@@ -79,7 +90,10 @@
             align-items: center;
             border-radius: 1em;
             background: rgb(9, 116, 238);
+<<<<<<< HEAD
             color:white;
+=======
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
         }
 
         .left {
@@ -113,6 +127,7 @@
 
         .content{
             flex:2;
+<<<<<<< HEAD
             color:white;
             /* border: 1px solid black; */
             padding:2em 1em;
@@ -130,16 +145,35 @@
 </head>
 
 <body onload="startTime()">
+=======
+
+            /* border: 1px solid black; */
+            padding:2em 1em;
+        }
+    </style>
+</head>
+
+<body>
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
 <div class="container">
     <nav>
         <div class="nav-text"><h1>ZOOM APPLICATION</h1></div>
 
+<<<<<<< HEAD
         <a th:href ="@{/logout}">
             <div class="logo">
                 <i class="fas fa-power-off"></i>
                 Logout
             </div>
         </a>
+=======
+            <a th:href ="@{/logout}">
+                <div class="logo">
+                <i class="fas fa-power-off"></i>
+                    Logout
+                </div>
+            </a>
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
 
     </nav>
 
@@ -148,6 +182,7 @@
         <div class="mini-container">
             <div class="dashboard-container">
                 <div class="left">
+<<<<<<< HEAD
                     <!--                    <a th:href="/scheduleMeeting" >-->
                     <a th:href="@{'/scheduleMeeting'}" class="icon-container">
                         <div class="icon" ><i class="fas fa-calendar-alt"></i>
@@ -164,11 +199,33 @@
                     </a>
 
                     <!--                    </a>-->
+=======
+<!--                    <a th:href="/scheduleMeeting" >-->
+                        <a th:href="@{'/scheduleMeeting'}">
+                            <div class="icon" ><i class="fas fa-plus"></i>
+                            </div>
+                            Schedule Meeting
+                        </a>
+
+<!--                    </a>-->
+
+<!--                    <a th:href = "/dashboard">-->
+                        <a th:href="@{'/dashboard'}">
+                            <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+                            Dashboard
+                        </a>
+
+<!--                    </a>-->
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
                 </div>
                 <div class="right">
                     <h1 class="header">Time</h1>
                     <div class="content">
+<<<<<<< HEAD
                         <h1 id="time"></h1>
+=======
+<!--                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis incidunt corrupti eum, maiores repellendus perferendis animi. Sequi ducimus officia quod!</p>-->
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
                     </div>
 
                 </div>
@@ -176,6 +233,7 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 
 <script>
 function startTime() {
@@ -194,5 +252,7 @@ function checkTime(i) {
   return i;
 }
 </script>
+=======
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
 </body>
 </html>

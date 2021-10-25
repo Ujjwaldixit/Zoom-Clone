@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  screen:
+    image: openvidu/openvidu-server-kms:2.20.0
+    container_name: screen
+    environment:
+      # - OPENVIDU_SECRET=MY_SECRET
+      - OPENVIDU_RECORDING=true
+      - OPENVIDU_RECORDING_PATH=/opt/openvidu/recordings
+    ports:
+      - 4443:4443
+    # restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/openvidu/recordings:/opt/openvidu/recordings
+
+# docker run -p 4443:4443 --rm -e OPENVIDU_RECORDING=true  -v /var/run/docker.sock:/var/run/docker.sock  openvidu/openvidu-server-kms:2.20.0
+
+
+# to start container
+# docker compose -f screen.yaml up
+
+# to stop container
+# docker compose -f screen.yaml down
+
+
+# docker run -p 4443:4443 --rm \
+#     -e OPENVIDU_RECORDING=true \
+#     -e OPENVIDU_RECORDING_PATH=/PATH/TO/VIDEO/FILES \
+#     -v /var/run/docker.sock:/var/run/docker.sock \
+#     -v /PATH/TO/VIDEO/FILES:/PATH/TO/VIDEO/FILES \
+# openvidu/openvidu-server-kms:2.20.0

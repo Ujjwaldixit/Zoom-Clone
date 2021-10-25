@@ -93,6 +93,11 @@ public class SessionController {
 
                         this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
+<<<<<<< HEAD
+=======
+                        // Add all the needed attributes to the template
+                        model.addAttribute("sessionId", session.getSessionId());
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
                         model.addAttribute("sessionName", sessionName);
                         model.addAttribute("token", token);
                         model.addAttribute("nickName", clientData);
@@ -107,14 +112,35 @@ public class SessionController {
                     }
                 } else {
                     try {
+<<<<<<< HEAD
                         session = this.openVidu.createSession();
 
+=======
+                        // Create a new OpenVidu Session
+                        RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                                .outputMode(Recording.OutputMode.COMPOSED)
+                                .resolution("640x480")
+                                .frameRate(24)
+                                .build();
+                        SessionProperties sessionProperties = new SessionProperties.Builder()
+                                .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                                .defaultRecordingProperties(recordingProperties)
+                                .build();
+
+                        Session session = this.openVidu.createSession(sessionProperties);
+                        // Generate a new token with the recently created connectionProperties
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
                         String token = session.createConnection(connectionProperties).getToken();
 
                         this.mapSessions.put(sessionName, session);
                         this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
                         this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
+<<<<<<< HEAD
+=======
+                        // Add all the needed attributes to the template
+                        model.addAttribute("sessionId", session.getSessionId());
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
                         model.addAttribute("sessionName", sessionName);
                         model.addAttribute("token", token);
                         model.addAttribute("nickName", clientData);
@@ -128,9 +154,50 @@ public class SessionController {
                     }
                 }
             } else {
+<<<<<<< HEAD
                 redirectAttributes.addFlashAttribute("error", "!!!Invalid Session Id!!!");
                 model.addAttribute("username", httpSession.getAttribute("loggedUser"));
                 return "redirect:/dashboard";
+=======
+                // New session
+                System.out.println("New session " + sessionName);
+                try {
+                    // Create a new OpenVidu Session
+                    RecordingProperties recordingProperties = new RecordingProperties.Builder()
+                            .outputMode(Recording.OutputMode.COMPOSED)
+                            .resolution("640x480")
+                            .frameRate(24)
+                            .build();
+                    SessionProperties sessionProperties = new SessionProperties.Builder()
+                            .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                            .defaultRecordingProperties(recordingProperties)
+                            .build();
+
+                    Session session = this.openVidu.createSession(sessionProperties);
+                    // Generate a new token with the recently created connectionProperties
+                    String token = session.createConnection(connectionProperties).getToken();
+
+                    // Store the session and the token in our collections
+                    this.mapSessions.put(sessionName, session);
+                    this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
+                    this.mapSessionNamesTokens.get(sessionName).put(token, role);
+
+                    // Add all the needed attributes to the template
+                    model.addAttribute("sessionId", session.getSessionId());
+                    model.addAttribute("sessionName", sessionName);
+                    model.addAttribute("token", token);
+                    model.addAttribute("nickName", clientData);
+                    model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
+
+                    // Return session.html template
+                    return "session";
+
+                } catch (Exception e) {
+                    // If error just return dashboard.html template
+                    model.addAttribute("username", httpSession.getAttribute("loggedUser"));
+                    return "dashboard";
+                }
+>>>>>>> 0f6e63e7c2c6046b1aa76619c7f4a75baa24df47
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "!!!Invalid Session Id!!!");
@@ -174,7 +241,7 @@ public class SessionController {
                 .frameRate(24)
                 .build();
         SessionProperties sessionProperties = new SessionProperties.Builder()
-                .recordingMode(RecordingMode.MANUAL) // RecordingMode.ALWAYS for automatic recording
+                .recordingMode(RecordingMode.ALWAYS) // RecordingMode.ALWAYS for automatic recording
                 .defaultRecordingProperties(recordingProperties)
                 .build();
         Session session = openVidu.createSession(sessionProperties);
